@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const SignUp = () => {
-	const serverURL = "https://afternoon-badlands-24510.herokuapp.com/"
+	const serverURL = "https://afternoon-badlands-24510.herokuapp.com"
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
