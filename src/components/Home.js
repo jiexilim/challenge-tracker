@@ -1,4 +1,4 @@
-import Header from "./header.js"
+import Header from "./Header.js"
 
 const Home = () => {
     return (

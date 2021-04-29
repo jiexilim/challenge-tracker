@@ -1,10 +1,11 @@
 
 import { useState } from 'react'
+import { Link } from "react-router-dom";
 
 const appName = 'Challenge Tracker'
 
 const Login = () => {
-	const [userName, setUserName] = useState('')
+	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 
 	const onSubmit = (e) => {
@@ -20,8 +21,8 @@ const Login = () => {
 				<input
 					type="text"
 					placeholder="Username"
-					value={ userName }
-					onChange={(e) => setUserName(e.target.value)}			
+					value={ username }
+					onChange={(e) => setUsername(e.target.value)}			
 				/>
 			</div>
 			<div>
@@ -33,6 +34,8 @@ const Login = () => {
 				/>
 			</div>
 			<input type='submit' value='Login' />
+			<br />
+			<p>Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
 		</form>
 	);
 };
