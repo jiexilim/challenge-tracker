@@ -1,34 +1,28 @@
 import { useState } from "react";
+import { Redirect } from 'react-router-dom';
+const axios = require("axios");
 
-const SignUp = () => {
+const SignUp = props => {
 	const serverURL = "https://afternoon-badlands-24510.herokuapp.com"
+	const localURL = "http://localhost:5000"
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
-	const onSubmit = async (e) => {
-		e.preventDefault();
+	const onSubmit = async (event) => {
+		event.preventDefault();
 
-		const result = await fetch(serverURL + "/user/register", {
-			method: "POST",
-			header: {
-				"Content-Typoe": "application/json",
-			},
-			body: JSON.stringify({
-				username,
-				password,
-			}),
-		}).then((res) => res.json());
+		axios.post(localURL + "/user/register", { username, password })
+			.then(res => console.log(res.data));
 
-		if (result.status === 'ok') {
-
-		} else {
-			alert(result.error);
-		}
+		setUsername("");
+		setPassword("");
+		props.history.push("/login");
 	};
 
 	return (
-		<form onSubmit={onSubmit}>
-			<div>
+		<form onSubmit={onSubmit} className="form-body">
+			<h1>Sign up. It's free.</h1>
+			<div className="form-group">
 				<input
 					type="text"
 					placeholder="Username"
@@ -36,15 +30,15 @@ const SignUp = () => {
 					onChange={(e) => setUsername(e.target.value)}
 				/>
 			</div>
-			<div>
-				<input
+			<div className="form-group">
+				<input 
 					type="text"
 					placeholder="Password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 			</div>
-			<input type="submit" value="Sign Up" />
+			<input type="submit" value="Sign Up" className="btn btn-block" />
 		</form>
 	);
 };

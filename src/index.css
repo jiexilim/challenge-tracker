@@ -11,3 +11,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.form-body {
+  margin: 0 auto;
+   max-width: 400px;
+   padding: 40px 40px;
+   position:absolute;
+   left:0;
+   right:0;
+   top: 50%;
+   transform: translateY(-50%);
+}
+
+.btn {
+  display: inline-block;
+  background: #000;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.btn-block {
+  display: block;
+  width: 50%;
+}
+
+.form-group {
+  margin: 20px 0;
+}
+
+.form-group input {
+  width: 50%;
+  height: 40px;
+  margin: 5px;
+  padding: 3px 7px;
+  font-size: 17px;
+}
