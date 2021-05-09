@@ -1,30 +1,21 @@
 
 import { useState } from 'react'
-import { Link } from "react-router-dom";
-const axios = require("axios");
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useAuth } from "../Auth/ProvideAuth";
 
-const Login = props => {
-	const serverURL = "https://afternoon-badlands-24510.herokuapp.com"
-	const localURL = "http://localhost:5000"
+const Login = () => {
+	let history = useHistory();
+	let location = useLocation();
+	let auth = useAuth();
+	
+	let { from } = location.state || { from: { pathname: "/" } };
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	const onSubmit = async (event) => {
 		event.preventDefault();
-
-		axios.post(localURL + "/user/login", { username, password })
-			.then(res => {
-				if (res.data.accessToken) {
-					props.history.push("/dashboard");
-				} else {
-					alert(res.data);
-				}
-				console.log(res.data)
-			});
-
-		setUsername("");
-		setPassword("");
-	};
+		auth.signin(username, password, () => history.replace(from))
+	}
 	
 	return (
 		<form onSubmit={onSubmit} className="form-body">
