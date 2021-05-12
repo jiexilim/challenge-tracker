@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Redirect } from 'react-router-dom';
 const axios = require("axios");
 
-const SignUp = props => {
+const SignUp = ({ history }) => {
 	const serverURL = "https://afternoon-badlands-24510.herokuapp.com"
 	const localURL = "http://localhost:5000"
 	const [username, setUsername] = useState("");
@@ -16,7 +15,7 @@ const SignUp = props => {
 
 		setUsername("");
 		setPassword("");
-		props.history.push("/login");
+		history.push("/login");
 	};
 
 	return (

@@ -1,14 +1,13 @@
 
 import { useState } from 'react'
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../Auth/ProvideAuth";
 
-const Login = () => {
-	let history = useHistory();
+const Login = ({ history }) => {
 	let location = useLocation();
-	let auth = useAuth();
-	
 	let { from } = location.state || { from: { pathname: "/" } };
+	let auth = useAuth();
+
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -16,7 +15,7 @@ const Login = () => {
 		event.preventDefault();
 		auth.signin(username, password, () => history.replace(from))
 	}
-	
+
 	return (
 		<form onSubmit={onSubmit} className="form-body">
 			<h1>Sign in.</h1>
@@ -24,16 +23,16 @@ const Login = () => {
 				<input
 					type="text"
 					placeholder="Username"
-					value={ username }
-					onChange={(e) => setUsername(e.target.value)}			
+					value={username}
+					onChange={(e) => setUsername(e.target.value)}
 				/>
 			</div>
 			<div className="form-group">
 				<input
 					type="text"
 					placeholder="Password"
-					value={ password }
-					onChange={(e) => setPassword(e.target.value)}			
+					value={password}
+					onChange={(e) => setPassword(e.target.value)}
 				/>
 			</div>
 			<input type='submit' value='Login' className="btn btn-block" />

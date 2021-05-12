@@ -1,16 +1,18 @@
-import { useHistory } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { useAuth } from "../Auth/ProvideAuth";
 
-const SignoutButton = props => {
-    let history = useHistory();
+const SignoutButton = ({history}) => {
     let auth = useAuth();
+
+    const onClick = async () => {
+        auth.signout(() => history.push('/'))
+	}
+  
 
     return auth.access ? (
         <p>
             <button
-                onClick={() => {
-                    auth.signout(() => history.push("/"));
-                }} 
+                onClick={ onClick } 
                 className="btn btn-block"
             >
                 Sign out
@@ -21,5 +23,5 @@ const SignoutButton = props => {
     );
 }
 
-export default SignoutButton
+export default withRouter(SignoutButton);
 
