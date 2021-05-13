@@ -1,3 +1,4 @@
+import React from "react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { createBrowserHistory } from "history";
 import PrivateRoute from "../Auth/PrivateRoute"
