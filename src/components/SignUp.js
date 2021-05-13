@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { useServer } from "../Server"
 const axios = require("axios");
 
 const SignUp = ({ history }) => {
-	const serverURL = "https://afternoon-badlands-24510.herokuapp.com"
-	const localURL = "http://localhost:5000"
+	const serverURL = useServer();
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	const onSubmit = async (event) => {
 		event.preventDefault();
 
-		axios.post(localURL + "/user/register", { username, password })
+		axios.post(serverURL + "/user/register", { username, password })
 			.then(res => console.log(res.data));
 
 		setUsername("");

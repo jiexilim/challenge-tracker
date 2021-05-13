@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import PrivateRoute from "../Auth/PrivateRoute"
 import { createBrowserHistory } from "history";
+import PrivateRoute from "../Auth/PrivateRoute"
+import SignoutButton from "../Auth/SignoutButton"
 import Home from "./Home"
 import Login from "./Login"
 import SignUp from "./SignUp"
 import Dashboard from "./Dashboard"
 import CreateGoal from "./CreateGoal"
 import Header from "./Header"
-import SignoutButton from "../Auth/SignoutButton"
+
 
 const history = createBrowserHistory();
 

@@ -1,9 +1,7 @@
 import { useContext, createContext, useState } from "react";
+import { useServer } from "../Server"
 
 const axios = require("axios");
-
-const serverURL = "https://afternoon-badlands-24510.herokuapp.com"
-const localURL = "http://localhost:5000"
 
 const authContext = createContext();
 
@@ -21,10 +19,11 @@ export const useAuth = () => {
 }
 
 const useProvideAuth = () => {
+  const serverURL = useServer();
   const [access, setAccess] = useState(null);
 
     const signin = (username, password, next) => {
-        return axios.post(localURL + "/user/login", { username, password })
+        return axios.post(serverURL + "/user/login", { username, password })
             .then(res => {
                 if (res.data.accessToken) {
                     setAccess(res.data.accessToken)
