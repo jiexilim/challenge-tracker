@@ -26,7 +26,7 @@ const CreateGoal = ({ history }) => {
                 userId: decoded.id
             }).then(res => console.log(res.data));
 
-        //history.push("/create-goal")
+        history.push("/goal-list")
     };
 
     return (

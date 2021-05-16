@@ -18,15 +18,30 @@ const GoalList = () => {
             .catch(err => console.log(err))
     })
 
-    console.log("haha")
-    console.log(goals)
+    const deleteGoal = async (id) => {
+        console.log(id)
+        axios.delete(serverURL + "/goal/delete", 
+        { data: { goalId: id } })
+        .then(res => {
+            setGoals(goals.filter((goal) => goal._id !== id));
+            console.log(res.data);
+        })
+        .catch(err => console.log(err))
+        
+    }
 
     return (
         <div className="content">
             <h1>Goal List</h1>
             <div className="goal-list">
                 {
-                    goals.map((goal, index) => (<Goal key={index} goal={goal} />))
+                    goals.map((goal, index) => (
+                        <Goal
+                            key={index}
+                            goal={goal}
+                            onDelete={deleteGoal}
+                        />
+                    ))
                 }
             </div>
         </div>
