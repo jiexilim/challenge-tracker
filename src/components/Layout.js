@@ -5,7 +5,6 @@ import PrivateRoute from "../Auth/PrivateRoute"
 import Home from "./Home"
 import Login from "./Login"
 import SignUp from "./SignUp"
-import Dashboard from "./Dashboard"
 import CreateGoal from "./CreateGoal"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
@@ -26,7 +25,6 @@ const Layout = () => {
                             <Route exact path="/" component={Home} />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/sign-up" component={SignUp} />
-                            <PrivateRoute exact path="/dashboard" component={Dashboard} />
                             <PrivateRoute exact path="/create-goal" component={CreateGoal} />
                             <Route render={() => <h1>Not found!</h1>} />
                         </Switch>

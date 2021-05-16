@@ -1,9 +1,10 @@
 import React from "react"
 import { Link } from "react-router-dom";
 import SignoutButton from "../Auth/SignoutButton"
+import LoginButton from "../Auth/LoginButton"
 import { useAuth } from "../Auth/ProvideAuth"
 
-const Header = () => {
+const Header = ({history}) => {
 	let isAuth = useAuth()
 
 	return (
@@ -12,11 +13,12 @@ const Header = () => {
 				<li className="nav-item">
 					<Link to="/" className="nav-link">Home</Link>
 				</li>
-				{
+				<LoginButton />
+				{/* {
 					!localStorage.getItem('userAccess')
-						? <li className="nav-item"><Link to="/dashboard" className="nav-link">Log in</Link></li>
+						? <li className="nav-item"><Link to="/" className="nav-link">Log in</Link></li>
 						: null
-				}
+				} */}
 				{
 					localStorage.getItem('userAccess')
 						? <li className="nav-item"><Link to="/create-goal" className="nav-link">+ New Goal</Link></li>
