@@ -143,3 +143,11 @@ code {
   line-height: 30px;
   align-items: center;
 }
+
+.goal-list {
+  display: flex;
+}
+
+.goal-item {
+  margin: 20px;
+}

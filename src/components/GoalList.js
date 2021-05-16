@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useServer } from "../Server"
+import Goal from "./Goal"
 const jwt = require("jsonwebtoken")
 const axios = require("axios");
-
 
 const GoalList = () => {
     const serverURL = useServer();
@@ -14,13 +14,21 @@ const GoalList = () => {
     useEffect(() => {
         axios.get(serverURL + "/goal/",
             { params: { userId: decoded.id } })
-            .then(res => console.log(res.data))
+            .then(res => setGoals(res.data))
             .catch(err => console.log(err))
-    }, [])
+    })
+
+    console.log("haha")
+    console.log(goals)
 
     return (
         <div className="content">
-            Goallist
+            <h1>Goal List</h1>
+            <div className="goal-list">
+                {
+                    goals.map((goal, index) => (<Goal key={index} goal={goal} />))
+                }
+            </div>
         </div>
     )
 }
