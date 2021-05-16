@@ -1,26 +1,21 @@
 import React from "react"
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { useAuth } from "../Auth/ProvideAuth";
 
 const SignoutButton = ({history}) => {
-    let auth = useAuth();
+    const userAccess = localStorage.getItem("userAccess");
+    const auth = useAuth();
 
     const onClick = async () => {
+        localStorage.clear();
         auth.signout(() => history.push('/'))
 	}
   
 
-    return auth.access ? (
-        <p>
-            <button
-                onClick={ onClick } 
-                className="btn btn-block"
-            >
-                Sign out
-        </button>
-        </p>
+    return userAccess ? (
+        <li className="nav-item"><Link className="nav-link" onClick={ onClick }>Sign out</Link></li>
     ) : (
-        <p></p>
+        null
     );
 }
 

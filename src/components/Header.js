@@ -1,28 +1,30 @@
 import React from "react"
 import { Link } from "react-router-dom";
-import { useAuth } from "../Auth/ProvideAuth";
+import SignoutButton from "../Auth/SignoutButton"
+import { useAuth } from "../Auth/ProvideAuth"
 
 const Header = () => {
-	let auth = useAuth();
+	let isAuth = useAuth()
 
 	return (
-		<header>
-			<div>
-				<nav>
-					<ul>
-						<li>
-							<Link to="/">Home</Link>
-						</li>
-						{
-							! auth.access ? <li><Link to="/dashboard">Log in</Link></li> : null
-						}
-						{
-							auth.access ? <li><Link to="/create-goal">+ New Goal</Link></li> : null
-						}
-					</ul>
-				</nav>
-			</div>
-		</header>
+		<div className="navbar">
+			<ul className="navbar-container">
+				<li className="nav-item">
+					<Link to="/" className="nav-link">Home</Link>
+				</li>
+				{
+					!localStorage.getItem('userAccess')
+						? <li className="nav-item"><Link to="/dashboard" className="nav-link">Log in</Link></li>
+						: null
+				}
+				{
+					localStorage.getItem('userAccess')
+						? <li className="nav-item"><Link to="/create-goal" className="nav-link">+ New Goal</Link></li>
+						: null
+				}
+				<SignoutButton />
+			</ul>
+		</div>
 	);
 };
 

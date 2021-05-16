@@ -26,7 +26,8 @@ const useProvideAuth = () => {
         return axios.post(serverURL + "/user/login", { username, password })
             .then(res => {
                 if (res.data.accessToken) {
-                    setAccess(res.data.accessToken)
+                    localStorage.setItem('userAccess', res.data.accessToken)
+                    setAccess(localStorage.getItem('userAccess'))
                     next();
                 } else {
                     alert(res.data);

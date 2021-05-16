@@ -17,28 +17,30 @@ const Login = ({ history }) => {
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="form-body">
-			<h1>Sign in.</h1>
-			<div className="form-group">
-				<input
-					type="text"
-					placeholder="Username"
-					value={username}
-					onChange={(e) => setUsername(e.target.value)}
-				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="text"
-					placeholder="Password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-				/>
-			</div>
-			<input type='submit' value='Login' className="btn btn-block" />
-			<br />
-			<p>Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
-		</form>
+		<div className="content">
+			<form onSubmit={onSubmit} className="form-body">
+				<h1>Sign in.</h1>
+				<div className="form-group">
+					<input
+						type="text"
+						placeholder="Username"
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
+					/>
+				</div>
+				<div className="form-group">
+					<input
+						type="password"
+						placeholder="Password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+					/>
+				</div>
+				<input type='submit' value='Login' className="btn btn-block" />
+				<br />
+				<p>Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
+			</form>
+		</div>
 	);
 };
 
