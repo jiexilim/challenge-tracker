@@ -8,6 +8,7 @@ import SignUp from "./SignUp"
 import CreateGoal from "./CreateGoal"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
+import GoalList from "./GoalList"
 
 const history = createBrowserHistory();
 
@@ -26,6 +27,7 @@ const Layout = () => {
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/sign-up" component={SignUp} />
                             <PrivateRoute exact path="/create-goal" component={CreateGoal} />
+                            <PrivateRoute exact path="/goal-list" component={GoalList} />
                             <Route render={() => <h1>Not found!</h1>} />
                         </Switch>
                     </div>

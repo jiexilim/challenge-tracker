@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useServer } from "../Server"
-import { useAuth } from "../Auth/ProvideAuth"
 import DatePicker from 'react-date-picker'
 const jwt = require("jsonwebtoken")
 const axios = require("axios");
@@ -12,8 +11,8 @@ const CreateGoal = ({ history }) => {
     const [benefit, setBenefit] = useState("");
     const [endDate, setEndDate] = useState(new Date());
 
-    const auth = useAuth();
-    const decoded = jwt.decode(auth.access);
+    const auth = localStorage.getItem("userAccess");
+    const decoded = jwt.decode(auth);
 
 	const onSubmit = async (event) => {
         event.preventDefault();
