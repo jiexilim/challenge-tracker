@@ -4,8 +4,8 @@ import SignoutButton from "../Auth/SignoutButton"
 import LoginButton from "../Auth/LoginButton"
 import { useAuth } from "../Auth/ProvideAuth"
 
-const Header = ({history}) => {
-	let isAuth = useAuth()
+const Header = () => {
+	useAuth()
 
 	return (
 		<div className="navbar">
@@ -14,11 +14,6 @@ const Header = ({history}) => {
 					<Link to="/" className="nav-link">Home</Link>
 				</li>
 				<LoginButton />
-				{/* {
-					!localStorage.getItem('userAccess')
-						? <li className="nav-item"><Link to="/" className="nav-link">Log in</Link></li>
-						: null
-				} */}
 				{
 					localStorage.getItem('userAccess')
 						? <li className="nav-item"><Link to="/create-goal" className="nav-link">+ New Goal</Link></li>

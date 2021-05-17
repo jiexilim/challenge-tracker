@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, withRouter } from "react-router-dom";
-import { useAuth } from "../Auth/ProvideAuth";
+import { useAuth } from "./ProvideAuth";
 
 const SignoutButton = ({history}) => {
     const userAccess = localStorage.getItem("userAccess");

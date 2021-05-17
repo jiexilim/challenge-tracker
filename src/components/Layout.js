@@ -9,18 +9,20 @@ import CreateGoal from "./CreateGoal"
 import Header from "./Header"
 import Sidebar from "./Sidebar"
 import GoalList from "./GoalList"
+import EditGoal from "./EditGoal"
+import { useAuth } from "../Auth/ProvideAuth"
+
 
 const history = createBrowserHistory();
 
 const Layout = () => {
+    useAuth();
     return (
         <div>
             <Router history={history}>
                 <div className="wrapper">
-                    <div className="sidebar">
-                        <Sidebar />
-                    </div>
-                    <div className="left-content">
+                    <Sidebar />
+                    <div className={ localStorage.getItem("userAccess") ? "left-content": "left-content-bfr-auth" }>
                         <Header />
                         <Switch>
                             <Route exact path="/" component={Home} />
@@ -28,6 +30,7 @@ const Layout = () => {
                             <Route exact path="/sign-up" component={SignUp} />
                             <PrivateRoute exact path="/create-goal" component={CreateGoal} />
                             <PrivateRoute exact path="/goal-list" component={GoalList} />
+                            <PrivateRoute exact path="/edit-goal" component={EditGoal} />
                             <Route render={() => <h1>Not found!</h1>} />
                         </Switch>
                     </div>

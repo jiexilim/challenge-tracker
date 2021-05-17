@@ -4,7 +4,7 @@ import Goal from "./Goal"
 const jwt = require("jsonwebtoken")
 const axios = require("axios");
 
-const GoalList = () => {
+const GoalList = ({history}) => {
     const serverURL = useServer();
     const [goals, setGoals] = useState([])
 
@@ -19,7 +19,6 @@ const GoalList = () => {
     })
 
     const deleteGoal = async (id) => {
-        console.log(id)
         axios.delete(serverURL + "/goal/delete", 
         { data: { goalId: id } })
         .then(res => {
@@ -27,7 +26,13 @@ const GoalList = () => {
             console.log(res.data);
         })
         .catch(err => console.log(err))
-        
+    }
+
+    const editGoal = async (goal) => {
+        history.push({
+            pathname: '/edit-goal',
+            state: { goal: goal }
+        })
     }
 
     return (
@@ -40,6 +45,7 @@ const GoalList = () => {
                             key={index}
                             goal={goal}
                             onDelete={deleteGoal}
+                            onEdit={editGoal}
                         />
                     ))
                 }
