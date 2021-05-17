@@ -16,7 +16,7 @@ jobs:
     steps:
     
     - uses: actions/checkout@v2
-    - uses: jiexilim/heroku-deploy@v3.12.12
+    - uses: jiexilim/challenge-tracker@main
       with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "challenge-track"
