@@ -12,6 +12,7 @@ const GoalList = ({history}) => {
     const decoded = jwt.decode(auth);
 
     useEffect(() => {
+
         axios.get(serverURL + "/goal/",
             { params: { userId: decoded.id } })
             .then(res => setGoals(res.data))
@@ -35,23 +36,38 @@ const GoalList = ({history}) => {
         })
     }
 
-    return (
-        <div className="content">
-            <h1>Goal List</h1>
-            <div className="goal-list">
-                {
-                    goals.map((goal, index) => (
-                        <Goal
-                            key={index}
-                            goal={goal}
-                            onDelete={deleteGoal}
-                            onEdit={editGoal}
-                        />
-                    ))
-                }
+    const accessGoal = async (goal) => {
+        localStorage.setItem('currentGoal', JSON.stringify(goal))
+        history.push('/target-list')
+    }
+
+    if (goals.length === 0) {
+        return (
+            <div className="content">
+                <button onClick={() => history.push('/create-goal')}>Create Goal</button>
+            </div >
+        )
+    } else {
+
+        return (
+            <div className="content">
+                <h1>Goal List</h1>
+                <div className="goal-list">
+                    {
+                        goals.map((goal, index) => (
+                            <Goal
+                                key={index}
+                                goal={goal}
+                                onDelete={deleteGoal}
+                                onEdit={editGoal}
+                                onAccess={accessGoal}
+                            />
+                        ))
+                    }
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 export default GoalList

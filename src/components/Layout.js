@@ -10,6 +10,9 @@ import Header from "./Header"
 import Sidebar from "./Sidebar"
 import GoalList from "./GoalList"
 import EditGoal from "./EditGoal"
+import TargetList from "./TargetList"
+import CreateTarget from "./CreateTarget"
+import EditTarget from "./EditTarget"
 import { useAuth } from "../Auth/ProvideAuth"
 
 
@@ -31,6 +34,9 @@ const Layout = () => {
                             <PrivateRoute exact path="/create-goal" component={CreateGoal} />
                             <PrivateRoute exact path="/goal-list" component={GoalList} />
                             <PrivateRoute exact path="/edit-goal" component={EditGoal} />
+                            <PrivateRoute exact path="/target-list" component={TargetList} />
+                            <PrivateRoute exact path="/create-target" component={CreateTarget} />
+                            <PrivateRoute exact path="/edit-target" component={EditTarget} />
                             <Route render={() => <h1>Not found!</h1>} />
                         </Switch>
                     </div>

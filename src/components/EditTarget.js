@@ -3,33 +3,31 @@ import { useServer } from "../Server"
 import axios from 'axios';
 import DatePicker from 'react-date-picker'
 
-const EditGoal = ({history}) => {
+const EditTarget = ({history}) => {
     const serverURL = useServer();
-	const [title, setTitle] = useState(history.location.state.goal.title);
-	const [description, setDescription] = useState(history.location.state.goal.description);
-    const [benefit, setBenefit] = useState(history.location.state.goal.benefit);
-    const [endDate, setEndDate] = useState(new Date(history.location.state.goal.endDate));
-    const goalId = history.location.state.goal._id;
+	const [title, setTitle] = useState(history.location.state.target.title);
+    const [endDate, setEndDate] = useState(new Date(history.location.state.target.endDate));
+    const isCompleted = history.location.state.target.isCompleted;
+    const targetId = history.location.state.target._id;
    
 	const onSubmit = async (event) => {
         event.preventDefault();
 
-        axios.post(serverURL + "/goal/edit",
+        axios.post(serverURL + "/target/edit",
             {
                 title,
-                description,
-                benefit,
                 endDate,
-                goalId: goalId
+                isCompleted,
+                targetId: targetId
             }).then(res => console.log(res.data));
 
-        history.push("/goal-list")
+        history.push("/target-list")
     };
 
     return (
         <div className="content">
             <form onSubmit={onSubmit} className="form-body">
-                <h1>Edit Goal</h1>
+                <h1>Edit Target</h1>
                 <div className="form-group">
                     <label>
                         Goal Name:
@@ -42,30 +40,7 @@ const EditGoal = ({history}) => {
                         />
                     </label>
                 </div>
-                <div className="form-group">
-                    <label>
-                        Description:
-                    <br />
-                        <input
-                            type="text"
-                            placeholder={description}
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </label>
-                </div>
-                <div className="form-group">
-                    <label>
-                        Benefit:
-                    <br />
-                        <input
-                            type="text"
-                            placeholder={benefit}
-                            value={benefit}
-                            onChange={(e) => setBenefit(e.target.value)}
-                        />
-                    </label>
-                </div>
+            
                 <div className="form-group">
                 <label>
                         Is there a date this Goal should be completed by?
@@ -84,4 +59,4 @@ const EditGoal = ({history}) => {
     );
 };
 
-export default EditGoal
+export default EditTarget

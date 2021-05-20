@@ -1,9 +1,9 @@
 import React from 'react'
 import { FaCalendarCheck, FaTimes, FaEdit } from "react-icons/fa"
 
-const Goal = ({goal, onDelete, onEdit}) => {
+const Goal = ({goal, onDelete, onEdit, onAccess}) => {
     return (
-        <div className="goal-item">
+        <div className="goal-item" onClick={() => onAccess(goal)}>
             <h3>{goal.title}</h3>
             <h6>{goal.description}</h6>
             <h6>{goal.benefit}</h6>

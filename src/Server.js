@@ -1,13 +1,13 @@
 import React, { createContext, useContext } from 'react'
 
-const herokuURL = "https://afternoon-badlands-24510.herokuapp.com"
-//const localURL = "http://localhost:5000"
+//const serverURL = "https://afternoon-badlands-24510.herokuapp.com"
+const serverURL = "http://localhost:5000"
 
 const ServerContext =  createContext();
 
 const Server = ({ children }) => {
     return (
-        <ServerContext.Provider value={herokuURL}>
+        <ServerContext.Provider value={serverURL}>
             {children}
         </ServerContext.Provider>
     )

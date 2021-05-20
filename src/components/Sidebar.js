@@ -10,7 +10,7 @@ const Sidebar = () => {
             (<div className="sidebar">
                 <div className="sidebar">
                     <ul>
-                        <li className="sidebar-item"><Link to="/goal-list" className="sidebar-link">Goal List</Link></li>
+                        <li className="sidebar-item"><Link to="/goal-list" className="sidebar-link">Goals</Link></li>
                     </ul>
                 </div>
             </div>) : null
