@@ -3,6 +3,23 @@ import { useServer } from "../Server"
 import DatePicker from 'react-date-picker'
 const axios = require("axios");
 
+export const computeDate = (duration, dateType) => {
+    const currDate = new Date();
+    const dd = currDate.getDate();
+    const mm = currDate.getMonth();
+    const yyyy = currDate.getFullYear();
+    let durInDays = 0
+    if (dateType === "wk") {
+        durInDays = 7;
+    } else if (dateType === "mth") {
+        durInDays = 31;
+    } else {
+        durInDays = 365;
+    }
+    const computed = new Date(yyyy, mm, dd + (duration * durInDays));
+    return computed;
+}
+
 const CreateTarget = ({history}) => {
     const serverURL = useServer();
     const [title, setTitle] = useState("");
@@ -11,28 +28,10 @@ const CreateTarget = ({history}) => {
     const goal = history.location.state.goal;
 
 
-    const computeDate = (duration, dateType) => {
-        const currDate = new Date();
-        const dd = currDate.getDate();
-        const mm = currDate.getMonth();
-        const yyyy = currDate.getFullYear();
-        let durInDays = 0
-        if (dateType === "wk") {
-            durInDays = 7;
-        } else if (dateType === "mth") {
-            durInDays = 31;
-        } else {
-            durInDays = 365;
-        }
-        const computed = new Date(yyyy, mm, dd + (duration * durInDays));
-        return computed;
-    }
-
-
 	const onSubmit = async (event) => {
         event.preventDefault();
         const endDate = computeDate(duration, dateType);
-        console.log(endDate)
+
         axios.post(serverURL + "/target/create",
             {
                 title,

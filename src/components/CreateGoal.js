@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useServer } from "../Server"
 import DatePicker from 'react-date-picker'
+import InputTag from "./InputTag"
 const jwt = require("jsonwebtoken")
 const axios = require("axios");
 
@@ -10,9 +11,21 @@ const CreateGoal = ({ history }) => {
 	const [description, setDescription] = useState("");
     const [benefit, setBenefit] = useState("");
     const [endDate, setEndDate] = useState(new Date());
+    const [tags, setTags] = useState([]);
 
     const auth = localStorage.getItem("userAccess");
     const decoded = jwt.decode(auth);
+
+    const handleFieldChange = (inputTags) => {
+        setTags(inputTags);
+    };
+
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            return false;
+        }
+    }
 
 	const onSubmit = async (event) => {
         event.preventDefault();
@@ -23,6 +36,7 @@ const CreateGoal = ({ history }) => {
                 description,
                 benefit,
                 endDate,
+                tags,
                 userId: decoded.id
             }).then(res => console.log(res.data));
 
@@ -33,7 +47,7 @@ const CreateGoal = ({ history }) => {
         <div className="content">
             <form onSubmit={onSubmit} className="form-body">
                 <h1>Create Goals. Track progress.</h1>
-                <div className="form-group">
+                <div className="form-group" onKeyDown={handleEnter}>
                     <label>
                         Give your Goal a name.
                     <br />
@@ -45,7 +59,7 @@ const CreateGoal = ({ history }) => {
                         />
                     </label>
                 </div>
-                <div className="form-group">
+                <div className="form-group" onKeyDown={handleEnter}>
                     <label>
                         Describe it and how it should be achieved. Be specific.
                     <br />
@@ -57,7 +71,7 @@ const CreateGoal = ({ history }) => {
                         />
                     </label>
                 </div>
-                <div className="form-group">
+                <div className="form-group" onKeyDown={handleEnter}>
                     <label>
                         Why do you want to set this Goal?
                     <br />
@@ -69,7 +83,7 @@ const CreateGoal = ({ history }) => {
                         />
                     </label>
                 </div>
-                <div className="form-group">
+                <div className="form-group" onKeyDown={handleEnter}>
                     <label>
                         Is there a date this Goal should be completed by?
                     <br />
@@ -79,6 +93,13 @@ const CreateGoal = ({ history }) => {
                             onSelect={(date) => setEndDate(date)}
                             onChange={(date) => setEndDate(date)}
                         />
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label>
+                        Add up to 5 tags to describe your Goal. 
+                        <br />
+                        <InputTag onChange={handleFieldChange} />
                     </label>
                 </div>
                 <input type="submit" value="Create" className="btn btn-block" />
