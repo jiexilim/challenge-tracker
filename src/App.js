@@ -1,6 +1,6 @@
 import React from "react"
-import Layout from "./components/Layout";
-import { ProvideAuth } from "./Auth/ProvideAuth"
+import Layout from "./Layout";
+import { ProvideAuth } from "./auth/ProvideAuth"
 import ServerContext from "./Server"
 
 const App = () => {
