@@ -5,13 +5,10 @@ const Home = () => {
     const userAccess = localStorage.getItem("userAccess");
 
     return (
-        <div className="content">
-            {
-                userAccess 
+            userAccess 
                 ? <Dashboard />
-                : <h1>Aim, plan, execute,<br /> with this challenge tracker.</h1>
-            }
-        </div>
+                : <h1 id="slogan">Aim, plan, execute,<br /> with this challenge tracker.</h1>
+            
     )
 }
 
