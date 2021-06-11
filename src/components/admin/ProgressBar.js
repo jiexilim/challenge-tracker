@@ -4,7 +4,7 @@ const ProgressBar = ({ percent, completed, due }) => {
     const [value, setValue] = useState(0);
 
     useEffect(() => {
-        setValue(Number(percent) * 400);
+        setValue(Number(percent) * 500);
     });
 
     return (

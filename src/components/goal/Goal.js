@@ -35,9 +35,12 @@ const Goal = ({ goal, onAccess }) => {
                 <span
                     className="access-goal"
                     onClick={() => onAccess(goal._id)}>
-                    <h3>{goal.name} </h3>
-                    <DBProgressBar percent={progress / numOfTasks} />
-                    <h4>
+                    <h3 className="goal-list-name">{goal.name} </h3>
+                    <DBProgressBar 
+                        className="goal-list-bar" 
+                        percent={progress / numOfTasks} 
+                    />
+                    <h4 className="goal-list-due">
                         <FaCalendarCheck />  
                         {
                             new Intl.DateTimeFormat('en-US', {
@@ -46,16 +49,16 @@ const Goal = ({ goal, onAccess }) => {
                             }).format(new Date(goal.endDate))
                         }
                     </h4>
-                    <h3 className="completed-msg">{ isCompleted && "completed!" }</h3>
+                    <h3 className="goal-list-completed-msg">{ isCompleted && "completed!" }</h3>
                 </span>
                 {
                     showTasks ?
                         <IoIosArrowDropupCircle
-                            className="goal-drop-down-icon"
+                            className="drop-down-up-icon"
                             onClick={() => setShowTasks(false)}
                         /> :
                         <IoIosArrowDropdownCircle
-                            className="goal-drop-up-icon"
+                            className="drop-down-up-icon"
                             onClick={() => setShowTasks(true)}
                         />
                 }
