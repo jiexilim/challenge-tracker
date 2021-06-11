@@ -3,17 +3,17 @@ import EditTaskForm from "./EditTaskForm"
 import { FaEdit } from "react-icons/fa"
 import { MdReplay } from "react-icons/md"
 import { AiOutlineUnorderedList } from "react-icons/ai"
-import { useServer } from "../../Server";
+import { useServer } from "../../Server"
 import Subtask from "./Subtask"
 import { Popover, Button } from '@material-ui/core'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
 import axios from "axios"
 
 const Task = ({ target, onEdit, onCheck }) => {
-    const serverURL = useServer();
+    const serverURL = useServer()
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
-    ];
+    ]
     const [showSubtasks, setShowSubtasks] = useState(false)
     const [showRecurProgress, setShowRecurProgress] = useState(false)
     const [numCompleted, setNumCompleted] = useState(0)
@@ -45,7 +45,7 @@ const Task = ({ target, onEdit, onCheck }) => {
                 isCompleted: target.isCompleted,
                 targetId: target._id
             }
-        ).then(res => console.log(res.data));
+        ).then(res => console.log(res.data))
     }
 
     const onSaveRecurProgress = () => {

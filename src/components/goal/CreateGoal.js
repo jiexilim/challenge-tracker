@@ -31,6 +31,7 @@ const CreateGoal = ({ history, closeForm }) => {
                 name,
                 benefit,
                 endDate,
+                notes,
                 tags,
                 userId: decoded.id
             }).then(res => {
@@ -48,7 +49,6 @@ const CreateGoal = ({ history, closeForm }) => {
                     <p>The strategy to attain $100,000 per month is different
                             from the strategy to attain $10,000 per month.</p>
                     <TextField
-                        id="outlined-basic"
                         classes={{ root: inputClasses.root }}
                         label="Goal name"
                         variant="outlined"
@@ -63,10 +63,11 @@ const CreateGoal = ({ history, closeForm }) => {
                     <p>People tend to get distracted by other things in life
                             and forget about the reason of setting the goal in the first place.</p>
                     <TextField
-                        id="outlined-basic"
                         classes={{ root: inputClasses.root }}
                         label="Purpose of the goal"
+                        multiline={true}
                         variant="outlined"
+                        rows={5}
                         value={benefit}
                         onChange={(e) => setBenefit(e.target.value)}
                     />
@@ -88,12 +89,14 @@ const CreateGoal = ({ history, closeForm }) => {
                 <label>
                     <h3>You may wish to add any type of additional information about your goal.</h3>
                     <p>They can be links to any websites, peoples, knowledge relating to the goal, etc.</p>
-                    <textarea
-                        placeholder="Your notes"
+                    <TextField
+                        classes={{ root: inputClasses.root }}
+                        label="Notes"
+                        multiline={true}
+                        variant="outlined"
+                        rows={5}
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
-                        rows={5}
-                        cols={50}
                     />
                 </label>
             </div>

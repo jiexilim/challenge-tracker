@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Product Sans';
+  font-family: Product Sans;
   font-style: normal;
   font-weight: 400;
   src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2) format('woff2');
@@ -12,6 +12,7 @@ body > * {
   -moz-osx-font-smoothing: grayscale;
   font-size: 15px;
   letter-spacing: 2px;
+  height: 100vh;
 }
 
 * {
@@ -28,9 +29,11 @@ body > * {
 
 .left-content {
   width: 100%;
-  margin-left: 150px;
+  padding-left: 150px;
   display: flex;
   flex-direction: column;
+  background-color: #f4f7fb;
+  height: 100vh;
 }
 
 .left-content-bfr-auth {
@@ -87,7 +90,7 @@ body > * {
   display: flex;
   padding: 20px 0px;
   transition: 0.6s;
-  background: white;
+  background-color: #f4f7fb;
   font-size: 20px;
   z-index: 1;
 }
@@ -165,7 +168,6 @@ body > * {
 
 /* create goal form */
 
-
 .create-goal-form-item {
   margin: 30px 0;
 }
@@ -180,6 +182,109 @@ body > * {
   border-radius: 10px;
   width: 100%;
   border: solid 1px #ccc;
+}
+
+/* --- */
+
+/* goal view */
+
+#goal-view {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#goal-view-header {
+  width: 70%;
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  box-shadow: inset 0 0 2px grey;
+  background: white;
+  border-radius: 5px;
+}
+
+#goal-view-header h2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+#edit-icon {
+  color: grey;
+}
+
+/* --- */
+
+/* edit goal form */
+
+
+.edit-goal-container {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: inset 0 0 2px grey;
+}
+
+#edit-goal-form {
+  display: grid;
+  grid-column-gap: 30px;
+  grid-row-gap: 40px;
+}
+
+.edit-goal-form-item-input {
+  padding: 10px 7px;
+  border-radius: 10px;
+  width: 100%;
+  border: solid 1px #ccc;
+}
+
+.label-title{
+  font-size: 12px;
+  color: #888888;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+#name-input {
+  grid-area: 1 / 1 / span 2 / span 1;
+  align-self: start;
+}
+
+#purpose-input {
+  grid-area: 2 / 1 / span 2 / span 1;
+  align-self: end;
+}
+
+#date-input {
+  grid-area: 1 / 2 / span 1 / span 1;
+  align-self: start;
+}
+
+#notes-input {
+  grid-area: 2 / 2 / span 2 / span 1;
+  align-self: end;
+}
+
+#edit-goal-btn-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 20px;
+}
+
+#edit-goal-btn-container Button:nth-child(2) {
+  margin-left: auto;
+}
+
+#edit-goal-btn-container > Button {
+  margin: 0 10px;
 }
 
 /* --- */
@@ -376,21 +481,66 @@ p {
 
 /* --- */
 
+/* progress bar */
 
-.progress-div {
+#progress-div {
   background-color: rgb(233, 233, 233);
-  height: 60px;
-  margin: 10px 0;
+  height: 30px;
   border-radius: 5px;
+  width: 500px;
+  padding: 10px;
+  align-items: center;
+  display: flex;
 }
 
-.progress {
+#progress-data {
+  width: inherit;
+  display: flex;
+  z-index: 1000;
+  padding: 0px 10px;
+}
+
+#progress {
   background-color: #0290B0;
-  height: 20px;
+  height: 30px;
   border-radius: 5px;
   transition: 1s ease;
   transition-delay: 0.5s;
-  margin-left: 5px;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  position: absolute;
 }
+
+#last-child {
+  margin-left: auto;
+}
+
+/* --- */
+
+/* dashbaord progress bar */
+
+.db-progress-div {
+  background-color: rgb(233, 233, 233);
+  height: 30px;
+  border-radius: 5px;
+  width: 400px;
+  padding: 10px;
+  align-items: center;
+  display: flex;
+}
+
+.db-progress-data {
+  width: inherit;
+  display: flex;
+  z-index: 1000;
+  padding: 0px 10px;
+}
+
+.db-progress {
+  background-color: #0290B0;
+  height: 30px;
+  border-radius: 5px;
+  transition: 1s ease;
+  transition-delay: 0.5s;
+  position: absolute;
+}
+
+/* --- */

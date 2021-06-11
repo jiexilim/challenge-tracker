@@ -41,14 +41,15 @@ export const blueButton = makeStyles({
     root: {
       background: '#0290B0 !important',
       color: 'white !important',
-      letterSpacing: "1px",
+      letterSpacing: "1px !important",
+      fontFamily: "Product Sans !important",
     }
 })
 
 export const cancelButton = makeStyles({
     root: {
-      background: '#0290B0 !important',
-      color: 'white !important',
+      background: 'none !important',
+      color: '#0290B0 !important',
     }
 })
 
@@ -81,5 +82,12 @@ export const createGoalInput = makeStyles({
     root: {
         width: "100%",
         marginTop: "100px",
-}
+    }
+})
+
+export const editGoalInput = makeStyles({
+    root: {
+        width: "100%",
+        fontFamily: "Product Sans !important",
+    }
 })

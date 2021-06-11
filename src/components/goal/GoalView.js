@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useServer } from "../../Server";
-import Task from "../target/Task.js";
+import Task from "../task/Task.js";
 import GoalViewHeader from "./GoalViewHeader"
-import AddTaskForm from "../target/AddTaskForm"
+import AddTaskForm from "../task/AddTaskForm"
+import { blueButton } from "../../functions"
 import { Popover, Button } from '@material-ui/core'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
 import axios from "axios";
@@ -11,50 +12,53 @@ import axios from "axios";
 const GoalView = () => {
     const { id } = useParams()
     const serverURL = useServer()
-    const [goal, setGoal] = useState()
-    const [targets, setTargets] = useState([])
-    const [numOfTargets, setNumOfTargets] = useState()
-    const [progress, setProgress] = useState()
-
+    const classes = blueButton()
+    const [goal, setGoal] = useState({})
+    const [tasks, setTasks] = useState([])
+    const [numOfTasks, setNumOfTasks] = useState(0)
+    const [progress, setProgress] = useState(0)
 
     useEffect(() => {
         axios.get(serverURL + "/goal/" + id)
-            .then(res => alert(res.data))
+            .then(res => setGoal(res.data.goal))
             .catch(err => console.log(err))
 
-        axios.get(serverURL + "/target/",
+        axios.get(serverURL + "/task/",
             { params: { goalId: id } })
-            .then(res => setTargets(res.data))
+            .then(res => setTasks(res.data))
             .catch(err => console.log(err))
 
-        setNumOfTargets(targets.length)
-        setProgress(targets.filter((target) => target.isCompleted).length)
+        setNumOfTasks(tasks.length)
+        setProgress(tasks.filter((task) => task.isCompleted).length)
     })
 
-    const checkTarget = async (target) => {
-        axios.post(serverURL + "/target/edit", {
-            name: target.name,
+    const checkTask = async (task) => {
+        axios.post(serverURL + "/task/edit", {
+            name: task.name,
             type: "single",
-            endDate: target.endDate,
-            subtasks: target.subtasks,
-            isCompleted: !(target.isCompleted),
-            targetId: target._id
+            endDate: task.endDate,
+            subtasks: task.subtasks,
+            isCompleted: !(task.isCompleted),
+            taskId: task._id
         }
-        ).then(res => console.log(res.data));
+        ).then(res => console.log(res.data))
     }
 
     return (
-        <div className="content">
-            {/* <GoalViewHeader 
+        <div className="content" id="goal-view">
+            <GoalViewHeader 
                 goal={goal}
                 progress={progress}
-                numOfTargets={numOfTargets}
+                numOfTasks={numOfTasks}
             />
-           */}
             <PopupState variant="popover" popupId="popup-popover">
                 {(popupState) => (
                     <div>
-                        <Button style={{backgroundColor: '#0290B0', color: 'white'}} variant="contained" {...bindTrigger(popupState)}>
+                        <Button
+                            classes={{ root: classes.root }}
+                            variant="contained"
+                            {...bindTrigger(popupState)}
+                        >
                             ADD TASK
                         </Button>
                         <Popover
@@ -75,11 +79,11 @@ const GoalView = () => {
             </PopupState>
             <div>
                 {
-                    targets.map((target, index) => (
+                    tasks.map((task, index) => (
                         <Task
                             key={index}
-                            target={target}
-                            onCheck={checkTarget}
+                            task={task}
+                            onCheck={checkTask}
                         />
                     ))
                 }

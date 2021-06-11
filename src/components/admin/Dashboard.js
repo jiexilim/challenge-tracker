@@ -25,8 +25,8 @@ const Dashboard = ({ history }) => {
             .catch(err => console.log(err))
     })
 
-    const accessGoal = async (goal) => {
-        history.push(`/goal/${goal._id}`)
+    const accessGoal = async (id) => {
+        history.push(`/goal/${id}`)
     }
 
     if (goals.length === 0) {
