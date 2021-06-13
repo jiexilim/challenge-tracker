@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
-import { handleEnter } from "../../functions"
+import { handleEnter, useStyles } from "../../functions"
 import DatePicker from 'react-date-picker'
 import TempSubtask from "./TempSubtask"
-import { Button } from "@material-ui/core"
+import { Button, TextField } from "@material-ui/core"
 
 const EditSingleTask = ({ task, onSubmit, onDelete, popupState }) => {
+    const classes = useStyles()
     const [showSubtasksForm, setShowSubtasksForm] = useState(false)
-    const [title, setTitle] = useState(task.title)
+    const [name, setName] = useState(task.name)
     const [endDate, setEndDate] = useState(task.endDate)
     const [subtasks, setSubtasks] = useState(task.subtasks)
     const [notes, setNotes] = useState(!task.notes ? "" : task.notes)
     const [subtaskName, setSubtaskName] = useState("")
-    const targetId = task._id
     const isCompleted = task.isCompleted
 
     const deleteSubtask = (id) => {
@@ -20,124 +20,118 @@ const EditSingleTask = ({ task, onSubmit, onDelete, popupState }) => {
     }
 
     const onSave = () => {
-        onSubmit({title, type: 'single', endDate, subtasks, notes, targetId, isCompleted })
+        popupState.close()
+        onSubmit({ name, type: 'single', endDate, subtasks, notes, isCompleted })
     }
 
     return (
-        <div style={{  overflowY: "scroll",  height: "300px" }}>
-
-            <div className="small-form-group" >
-                <label>
-                    <h4>Your Task:</h4>
-                    <input
-                        type="text"
-                        placeholder={title}
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </label>
+        <div className="task-form">
+            <div onKeyDown={handleEnter}>
+                <p>Task name:</p>
+                <TextField
+                    variant="outlined"
+                    classes={{ root: classes.taskInput }}
+                    placeholder="Task name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
             </div>
-
-            <div className="small-form-group"  onKeyDown={handleEnter}>
-                <label>
-                    <h4>Complete by:</h4>
-                    <DatePicker
-                        value={endDate}
-                        showTimeSelect
-                        onSelect={(date) => setEndDate(date)}
-                        onChange={(date) => setEndDate(date)}
-                    />
-                </label>
+            <div onKeyDown={handleEnter}>
+                <p>Complete by:</p>
+                <DatePicker
+                    value={endDate}
+                    showTimeSelect
+                    onSelect={(date) => setEndDate(date)}
+                    onChange={(date) => setEndDate(date)}
+                />
             </div>
-         
-                <div className="small-form-group" style={{ padding: "10px" }} onKeyDown={handleEnter}>
-                    <label>
-                        <h4>Notes: (Opt)</h4>
-                        <textarea
-                            placeholder="Your notes"
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                            rows={5}
-                            cols={50}
-                        />
-                    </label>
-                </div>
-            
-
-            {
-                !showSubtasksForm ?
-                    <button
-                        type="button"
-                        className="sub-btn"
-                        onClick={() => setShowSubtasksForm(true)}>
-                        Add subtasks
-                </button> :
-                    <button
-                        type="button"
-                        className="sub-btn"
-                        onClick={() => setSubtasks([])}>
-                        Clear subtasks
-                </button>
-            }
-
-            {
-                showSubtasksForm &&
-                <div>
-                    Subtasks:
-                    {
-                        subtasks.filter((subtask) => !subtask.isCompleted).map((subtask, index) => <TempSubtask
-                            key={index}
-                            subtask={subtask}
-                            onDelete={deleteSubtask} />)
-                    }
-                    <div className="small-form-group" >
-                        <input
-                            type="text"
-                            placeholder="Subtask"
-                            value={subtaskName}
-                            onChange={(e) => setSubtaskName(e.target.value)}
-                        />
-                        <button
-                            type="button"
-                            className="sub-btn"
-                            onClick={() => {
-                                const id = Math.floor(Math.random() * 10000) + 1
-                                const newSubtask = { id: id, name: subtaskName, isCompleted: false };
-                                setSubtasks([...subtasks, newSubtask])
-                                setSubtaskName("")
-                            }} >
-                            Add
-                    </button>
+            <div onKeyDown={handleEnter}>
+                {subtasks.length !== 0 &&
+                    <div className="temp-subtask-container">
+                        <p>Subtasks:</p>
+                        {
+                            subtasks.filter((subtask) => !subtask.isCompleted).map((subtask, index) => <TempSubtask
+                                key={index}
+                                subtask={subtask}
+                                onDelete={deleteSubtask} />)
+                        }
                     </div>
-                </div>
-            }
-            <br/>
-            <Button style={{
-                    display: "block", background: "none",
-                    float: "left", border: "none", padding: "none",
-                    color: "#0290B0", textDecoration: "underline", padding: "10px 10px",
-                    margin: "5px", marginTop: "30px"
-                }} onClick={popupState.close}>
-                    Cancel
-                
-            </Button>
-
-            <Button style={{ backgroundColor: '#0290B0', color: 'white', padding: "10px 10px",
-                    margin: "20px", float: "right" }} variant="contained" onClick={() => {
-                popupState.close()
-                onSave()
-            }}>
-                SAVE
-            </Button>
-
-            <Button style={{ backgroundColor: '#0290B0', color: 'white', padding: "10px 10px",
-                    margin: "20px", float: "right" }} variant="contained" onClick={() => {
-                popupState.close()
-                onDelete(targetId)
-            }}>
-                DELETE
-            </Button>
-
+                }
+                {
+                    !showSubtasksForm ?
+                        <Button
+                            classes={{ root: classes.subBlueButton }}
+                            onClick={() => setShowSubtasksForm(true)}
+                        >
+                            ADD SUBTASK
+                        </Button> :
+                        <Button
+                            classes={{ root: classes.subBlueButton }}
+                            onClick={() => setSubtasks([])}
+                        >
+                            CLEAR SUBTASKS
+                        </Button>
+                }
+                {
+                    showSubtasksForm &&
+                    <label>
+                        <div className="subtask-input-container">
+                            <div className="subtask-input">
+                                <TextField
+                                    variant="outlined"
+                                    classes={{ root: classes.taskInput }}
+                                    placeholder='Subtask'
+                                    value={subtaskName}
+                                    onChange={(e) => setSubtaskName(e.target.value)}
+                                />
+                            </div>
+                            <Button
+                                classes={{ root: classes.subBlueButton }}
+                                onClick={() => {
+                                    const id = Math.floor(Math.random() * 10000) + 1
+                                    const newSubtask = { id: id, name: subtaskName, isCompleted: false };
+                                    setSubtasks([...subtasks, newSubtask])
+                                    setSubtaskName("")
+                                }}
+                            >
+                                +
+                            </Button>
+                        </div>
+                    </label>
+                }
+            </div>
+            <div onKeyDown={handleEnter}>
+                <p>Notes:</p>
+                <TextField
+                    classes={{ root: classes.taskInput }}
+                    multiline={true}
+                    placeholder="Notes"
+                    variant="outlined"
+                    rows={4}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                />
+            </div>
+            <div className="task-form-btn-container">
+                <Button
+                    classes={{ root: classes.cancelButton }}
+                    onClick={popupState.close}
+                >
+                    CANCEL
+                </Button>
+                <Button
+                    classes={{ root: classes.blueButton }}
+                    onClick={onDelete}
+                >
+                    DELETE
+                </Button>
+                <Button
+                    classes={{ root: classes.blueButton }}
+                    onClick={onSave}
+                >
+                    SAVE
+                </Button>
+            </div>
         </div>
     )
 }

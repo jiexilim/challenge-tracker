@@ -1,16 +1,15 @@
 import React from 'react'
-import { ImCross } from "react-icons/im"
+import { FaTimes } from "react-icons/fa"
 
 const Subtask = ({ subtask, onDelete }) => {
     return (
-        <div className="row-item">
-            <ImCross
-                className="pointer-item"
-                size="10px"
-                style={{ display: 'inline-block', marginRight: '50px', color: "grey" }}
+        <div className="temp-subtask">
+            <FaTimes
+                className="temp-subtask-cancel"
+                size={15}
                 onClick={() => onDelete(subtask.id)}
             />
-            <h5 style={{ display: 'inline-block', marginRight: '50px' }}>{subtask.name}</h5>
+            <h4 className="temp-subtask-name">{subtask.name}</h4>
         </div>
     )
 }

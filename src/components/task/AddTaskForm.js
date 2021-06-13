@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { useServer } from "../../Server"
 import SingleTaskForm from './SingleTaskForm'
 import RecurringTaskForm from "./RecurringTaskForm"
+import { useStyles } from "../../functions"
 import { Button } from '@material-ui/core'
 import axios from "axios"
 
 const AddTaskForm = ({ popupState }) => {
     const serverURL = useServer()
+    const classes = useStyles()
     const [type, setType] = useState("single")
 
     useEffect(() => {
@@ -17,32 +19,25 @@ const AddTaskForm = ({ popupState }) => {
     })
 
     const onSubmit = (task) => {
-        axios.post(serverURL + "/target/create", task)
+        axios.post(serverURL + "/task/create", task)
             .then(res => console.log(res.data));
     }
 
     return (
-
-        <div style={{
-            display: "block", zIndex: 1000000, background: "white", position: "sticky",
-            boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-            padding: "10px", width: "400px", alignContent: "center"
-        }}>
-
-            <div style={{ background: "white", paddingBottom: "10px", borderBottom: "solid grey", borderWidth: "thin" }}>
-                <Button color="default" variant="outlined" style={{ marginRight: "20px" }} onClick={() => {
-                    setType("single")
-                }}>
-                    SINGLE TASK
+        <div id="add-task-form">
+            <Button
+                classes={{ root: type === "single" ? classes.clickedTaskTypeButton : classes.taskTypeButton }}
+                onClick={() => setType("single")}
+            >
+                SINGLE TASK
             </Button>
-                <Button color="default" variant="outlined" onClick={() => {
-                    setType("recurring")
-                }}>
-                    RECURRING TASK
+            <Button
+                classes={{ root: type === "recurring" ? classes.clickedTaskTypeButton : classes.taskTypeButton }}
+                onClick={() => setType("recurring")}
+            >
+                RECURRING TASK
             </Button>
-            </div>
-
-            <form onSubmit={onSubmit} className="form-group">
+            <form onSubmit={onSubmit} className="add-task-form">
                 {type === 'single' && <SingleTaskForm onSubmit={onSubmit} popupState={popupState} />}
                 {type === 'recurring' && <RecurringTaskForm onSubmit={onSubmit} popupState={popupState} />}
             </form>

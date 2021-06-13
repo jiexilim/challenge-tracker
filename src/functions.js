@@ -24,7 +24,6 @@ export const dateForNextRecurrence = (date, recurEvery) => {
     }
 }
 
-
 export const dateForDayOfNextWeek = (date, dayOfWeek) => {
     let nextDate = new Date(
         date.getFullYear(),
@@ -37,57 +36,109 @@ export const dateForDayOfNextWeek = (date, dayOfWeek) => {
     return nextDate;
 }
 
-export const blueButton = makeStyles({
-    root: {
-      background: '#0290B0 !important',
-      color: 'white !important',
-      letterSpacing: "1px !important",
-      fontFamily: "Product Sans !important",
-    }
-})
-
-export const cancelButton = makeStyles({
-    root: {
-      background: 'none !important',
-      color: '#0290B0 !important',
-    }
-})
-
-export const modalStyles = makeStyles({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+export const useStyles = makeStyles((theme) => ({
+    blueButton: {
+        background: '#0290B0 !important',
+        color: 'white !important',
+        letterSpacing: "1px !important",
+        fontFamily: "Product Sans !important",
     },
-    paper: {
-        backgroundColor: "#fff",
-        boxShadow: "inset 0 0 2px #000000",
-        padding: "60px",
-        overflowY: "scroll",
-        width: '50%',
+    subBlueButton: {
+        background: "rgba(98, 138, 138, 1) !important",
+        color: "white !important",
+        letterSpacing: "1px !important",
+        fontFamily: "Product Sans !important",
     },
-    view: {
-        display: "flex",
-        height: "100%",
-        justifyContent: 'center',
+    taskTypeButton: {
+        '&:hover': {
+            background: "rgba(98, 138, 138, 1) !important",
+            color: "white",
+        },
+        letterSpacing: "1px !important",
+        fontFamily: "Product Sans !important",
+        width: "50%",
+        borderBottom: "solid 1px #ccc !important",
+        borderRadius: "0px !important",
     },
-    cross: {
-        color: "white",
-        cursor: "pointer",
-        margin: "15px",
-    }
-})
-
-export const createGoalInput = makeStyles({
-    root: {
+    clickedTaskTypeButton: {
+        letterSpacing: "1px !important",
+        fontFamily: "Product Sans !important",
+        width: "50%",
+        borderBottom: "solid 1px #ccc !important",
+        borderRadius: "0px !important",
+        background: "rgba(98, 138, 138, 1) !important",
+        color: "white !important",
+    },
+    mainBlueButton: {
+        background: '#0290B0 !important',
+        color: 'white !important',
+        letterSpacing: "1px !important",
+        fontFamily: "Product Sans !important",
+        fontSize: "20px !important",
+    },
+    cancelButton: {
+        background: 'none !important',
+        color: '#0290B0 !important',
+    },
+    modalStyles: {
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        paper: {
+            backgroundColor: "#fff",
+            boxShadow: "inset 0 0 2px #000000",
+            padding: "60px",
+            overflowY: "scroll",
+            width: '50%',
+        },
+        view: {
+            display: "flex",
+            height: "100%",
+            justifyContent: 'center',
+        },
+        cross: {
+            color: "white",
+            cursor: "pointer",
+            margin: "15px",
+        }
+    },
+    createGoalInput: {
         width: "100%",
         marginTop: "100px",
-    }
-})
-
-export const editGoalInput = makeStyles({
-    root: {
+    },
+    editGoalInput: {
         width: "100%",
         fontFamily: "Product Sans !important",
-    }
-})
+    },
+    taskInput: {
+        width: "95%",
+        fontFamily: "Product Sans !important",
+        padding: "0px !important",
+    },
+    dropDown: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    checkBox: {
+        padding: "0px !important",
+        color: "#0290B0 !important"
+    },
+    completeSkipButton: {
+        '&:hover': {
+            background: "rgba(98, 138, 138, 1) !important",
+            color: "white",
+        },
+        letterSpacing: "1px !important",
+        fontFamily: "Product Sans !important",
+        width: "100%",
+    },
+    clickedCompleteSkipButton: {
+        letterSpacing: "1px !important",
+        fontFamily: "Product Sans !important",
+        width: "100%",
+        background: "rgba(98, 138, 138, 1) !important",
+        color: "white !important",
+    },
+}))

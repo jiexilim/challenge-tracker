@@ -4,7 +4,7 @@ import { useServer } from "../../Server";
 import Task from "../task/Task.js";
 import GoalViewHeader from "./GoalViewHeader"
 import AddTaskForm from "../task/AddTaskForm"
-import { blueButton } from "../../functions"
+import { useStyles } from "../../functions"
 import { Popover, Button } from '@material-ui/core'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
 import axios from "axios";
@@ -12,7 +12,7 @@ import axios from "axios";
 const GoalView = () => {
     const { id } = useParams()
     const serverURL = useServer()
-    const classes = blueButton()
+    const classes = useStyles()
     const [goal, setGoal] = useState({})
     const [tasks, setTasks] = useState([])
     const [numOfTasks, setNumOfTasks] = useState(0)
@@ -25,28 +25,18 @@ const GoalView = () => {
 
         axios.get(serverURL + "/task/",
             { params: { goalId: id } })
-            .then(res => setTasks(res.data))
+            .then(res => {
+                setTasks(res.data)
+            })
             .catch(err => console.log(err))
 
         setNumOfTasks(tasks.length)
         setProgress(tasks.filter((task) => task.isCompleted).length)
     })
 
-    const checkTask = async (task) => {
-        axios.post(serverURL + "/task/edit", {
-            name: task.name,
-            type: "single",
-            endDate: task.endDate,
-            subtasks: task.subtasks,
-            isCompleted: !(task.isCompleted),
-            taskId: task._id
-        }
-        ).then(res => console.log(res.data))
-    }
-
     return (
         <div className="content" id="goal-view">
-            <GoalViewHeader 
+            <GoalViewHeader
                 goal={goal}
                 progress={progress}
                 numOfTasks={numOfTasks}
@@ -55,7 +45,7 @@ const GoalView = () => {
                 {(popupState) => (
                     <div>
                         <Button
-                            classes={{ root: classes.root }}
+                            classes={{ root: classes.mainBlueButton }}
                             variant="contained"
                             {...bindTrigger(popupState)}
                         >
@@ -77,13 +67,12 @@ const GoalView = () => {
                     </div>
                 )}
             </PopupState>
-            <div>
+            <div id="tasks-container">
                 {
                     tasks.map((task, index) => (
                         <Task
                             key={index}
                             task={task}
-                            onCheck={checkTask}
                         />
                     ))
                 }

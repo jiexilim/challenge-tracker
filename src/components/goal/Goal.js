@@ -18,7 +18,7 @@ const Goal = ({ goal, onAccess }) => {
         axios.get(serverURL + "/task/",
             { params: { goalId: goal._id } })
             .then(res => {
-                const tasks = res.data;
+                let tasks = res.data
                 setNumOfTasks(tasks.length)
                 setProgress(tasks.filter((task) => task.isCompleted).length)
                 if (progress === numOfTasks && numOfTasks !== 0) {
@@ -36,12 +36,12 @@ const Goal = ({ goal, onAccess }) => {
                     className="access-goal"
                     onClick={() => onAccess(goal._id)}>
                     <h3 className="goal-list-name">{goal.name} </h3>
-                    <DBProgressBar 
-                        className="goal-list-bar" 
-                        percent={progress / numOfTasks} 
+                    <DBProgressBar
+                        className="goal-list-bar"
+                        percent={progress / numOfTasks}
                     />
                     <h4 className="goal-list-due">
-                        <FaCalendarCheck />  
+                        <FaCalendarCheck />
                         {
                             new Intl.DateTimeFormat('en-US', {
                                 year: 'numeric',
@@ -49,18 +49,22 @@ const Goal = ({ goal, onAccess }) => {
                             }).format(new Date(goal.endDate))
                         }
                     </h4>
-                    <h3 className="goal-list-completed-msg">{ isCompleted && "completed!" }</h3>
+                    <h3 className="goal-list-completed-msg">{isCompleted && "completed!"}</h3>
                 </span>
                 {
-                    showTasks ?
-                        <IoIosArrowDropupCircle
-                            className="drop-down-up-icon"
-                            onClick={() => setShowTasks(false)}
-                        /> :
-                        <IoIosArrowDropdownCircle
-                            className="drop-down-up-icon"
-                            onClick={() => setShowTasks(true)}
-                        />
+                    tasks.length > 0 ?
+                        (showTasks ?
+                            <IoIosArrowDropupCircle
+                                size={25}
+                                className="drop-down-up-icon"
+                                onClick={() => setShowTasks(false)}
+                            /> :
+                            <IoIosArrowDropdownCircle
+                                size={25}
+                                className="drop-down-up-icon"
+                                onClick={() => setShowTasks(true)}
+                            />) :
+                        <p>{"       "}</p>
                 }
             </div>
             {

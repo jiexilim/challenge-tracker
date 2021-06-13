@@ -4,13 +4,11 @@ import SignOutButton from "./SignOutButton"
 import SignInButton from "./SignInButton"
 import CreateGoal from "../goal/CreateGoal"
 import { useAuth } from "../../auth/ProvideAuth"
-import { blueButton } from "../../functions"
 import ModalForm from "./ModalForm"
 
 const Header = () => {
 	useAuth()
 	const userAccess = localStorage.getItem('userAccess')
-    const classes = blueButton()
 	const [openForm, setOpenForm] = useState(false)
 
 	const greeting = () => {
@@ -32,23 +30,23 @@ const Header = () => {
 						<span id="greeting">
 							{userAccess && greeting()}
 						</span>
-						<Link className="nav-link-afr-auth" onClick={() => setOpenForm(true)}>+ New Goal</Link>
+						<span className="nav-link-afr-auth" onClick={() => setOpenForm(true)}>+ New Goal</span>
 						<SignOutButton />
 					</div>
 					:
 					<div className="nav-container ">
 						<Link to="/" className="nav-link">Home</Link>
 						<span>
-						<SignInButton />
-						<Link to="/sign-up" className="nav-link">Sign Up</Link>
+							<SignInButton />
+							<Link to="/sign-up" className="nav-link">Sign Up</Link>
 						</span>
 					</div>
 			}
-			<ModalForm 
-                openForm={openForm} 
-                closeForm={()=>setOpenForm(false)} 
-                FormComponent={CreateGoal} 
-            />
+			<ModalForm
+				openForm={openForm}
+				closeForm={() => setOpenForm(false)}
+				FormComponent={CreateGoal}
+			/>
 		</div>
 	)
 }

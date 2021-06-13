@@ -1,18 +1,18 @@
 import React from 'react'
+import { Checkbox } from '@material-ui/core'
+import { useStyles } from "../../functions"
 
 const Subtask = ({ subtask, onCheck }) => {
+    const classes = useStyles()
+
     return (
-        <div style={{ marginLeft: "40px" }}>
-            <input
-                style={{ cursor: 'pointer', marginLeft: "10px", marginRight: "20px" }}
-                type="checkbox"
+        <div className="subtask-container">
+            <Checkbox
+                classes={{ root: classes.checkBox }}
                 checked={subtask.isCompleted}
                 onChange={() => onCheck(subtask)}
             />
-            <h3
-                style={{ textDecorationLine: subtask.isCompleted ? 'line-through' : 'none', display: "inline-block"}}>
-                {subtask.name}
-            </h3>
+            <p>{subtask.name}</p>
         </div>
     )
 }

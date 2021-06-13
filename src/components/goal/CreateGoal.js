@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { withRouter } from "react-router-dom"
 import { useServer } from "../../Server"
-import { handleEnter, blueButton, createGoalInput } from "../../functions"
+import { handleEnter, useStyles } from "../../functions"
 import { Button, TextField } from "@material-ui/core"
 import InputTag from "./InputTag"
 import DatePicker from 'react-date-picker'
@@ -10,8 +10,7 @@ import axios from "axios"
 
 const CreateGoal = ({ history, closeForm }) => {
     const serverURL = useServer()
-    const classes = blueButton()
-    const inputClasses = createGoalInput()
+    const classes = useStyles()
     const [name, setName] = useState("")
     const [benefit, setBenefit] = useState("")
     const [endDate, setEndDate] = useState(new Date())
@@ -47,9 +46,9 @@ const CreateGoal = ({ history, closeForm }) => {
                 <label>
                     <h3>What is your goal? Be specific.</h3>
                     <p>The strategy to attain $100,000 per month is different
-                            from the strategy to attain $10,000 per month.</p>
+                        from the strategy to attain $10,000 per month.</p>
                     <TextField
-                        classes={{ root: inputClasses.root }}
+                        classes={{ root: classes.createGoalInput }}
                         label="Goal name"
                         variant="outlined"
                         value={name}
@@ -61,9 +60,9 @@ const CreateGoal = ({ history, closeForm }) => {
                 <label>
                     <h3>Why do you want to set this goal?</h3>
                     <p>People tend to get distracted by other things in life
-                            and forget about the reason of setting the goal in the first place.</p>
+                        and forget about the reason of setting the goal in the first place.</p>
                     <TextField
-                        classes={{ root: inputClasses.root }}
+                        classes={{ root: classes.createGoalInput }}
                         label="Purpose of the goal"
                         multiline={true}
                         variant="outlined"
@@ -90,7 +89,7 @@ const CreateGoal = ({ history, closeForm }) => {
                     <h3>You may wish to add any type of additional information about your goal.</h3>
                     <p>They can be links to any websites, peoples, knowledge relating to the goal, etc.</p>
                     <TextField
-                        classes={{ root: inputClasses.root }}
+                        classes={{ root: classes.createGoalInput }}
                         label="Notes"
                         multiline={true}
                         variant="outlined"
@@ -107,7 +106,7 @@ const CreateGoal = ({ history, closeForm }) => {
                 </label>
             </div>
             <Button
-                classes={{ root: classes.root }}
+                classes={{ root: classes.blueButton }}
                 variant="contained"
                 onClick={() => {
                     closeForm()
@@ -115,7 +114,7 @@ const CreateGoal = ({ history, closeForm }) => {
                 }}
             >
                 CREATE
-                </Button>
+            </Button>
         </div>
     )
 }

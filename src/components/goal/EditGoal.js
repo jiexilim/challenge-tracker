@@ -3,15 +3,13 @@ import { withRouter, useParams } from "react-router-dom"
 import { useServer } from "../../Server"
 import axios from 'axios';
 import DatePicker from 'react-date-picker'
-import { handleEnter, blueButton, cancelButton, editGoalInput } from "../../functions"
+import { handleEnter, useStyles } from "../../functions"
 import { TextField, Button } from "@material-ui/core"
 
 const EditGoal = ({ history, goal, closeForm }) => {
     const { id } = useParams()
-    const serverURL = useServer();
-    const classes = blueButton()
-    const cancelBtnClasses = cancelButton()
-    const textFieldClasses = editGoalInput()
+    const serverURL = useServer()
+    const classes = useStyles()
     const [name, setName] = useState(goal.name)
     const [benefit, setBenefit] = useState(goal.benefit)
     const [endDate, setEndDate] = useState(goal.endDate)
@@ -44,7 +42,7 @@ const EditGoal = ({ history, goal, closeForm }) => {
                 <div className="edit-goal-form-item" id="name-input">
                     <TextField
                         variant="outlined"
-                        classes={{ root: textFieldClasses.root }}
+                        classes={{ root: classes.editGoalInput }}
                         label="Goal name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -52,7 +50,7 @@ const EditGoal = ({ history, goal, closeForm }) => {
                 </div>
                 <div className="edit-goal-form-item" id="purpose-input">
                     <TextField
-                        classes={{ root: textFieldClasses.root }}
+                        classes={{ root: classes.editGoalInput }}
                         label="Purpose of the goal"
                         multiline={true}
                         variant="outlined"
@@ -77,7 +75,7 @@ const EditGoal = ({ history, goal, closeForm }) => {
                     id="notes-input"
                     onKeyDown={handleEnter}>
                     <TextField
-                        classes={{ root: textFieldClasses.root }}
+                        classes={{ root: classes.editGoalInput }}
                         label="Notes"
                         multiline={true}
                         variant="outlined"
@@ -89,20 +87,20 @@ const EditGoal = ({ history, goal, closeForm }) => {
             </div>
             <div id="edit-goal-btn-container">
                 <Button
-                    classes={{ root: cancelBtnClasses.root }}
+                    classes={{ root: classes.cancelButton }}
                     onClick={closeForm}
                 >
                     Cancel
                 </Button>
                 <Button
-                    classes={{ root: classes.root }}
+                    classes={{ root: classes.blueButton }}
                     variant="contained"
                     onClick={deleteGoal}
                 >
                     DELETE
                 </Button>
                 <Button
-                    classes={{ root: classes.root }}
+                    classes={{ root: classes.blueButton }}
                     variant="contained"
                     onClick={onSubmit}
                 >

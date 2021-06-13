@@ -1,25 +1,30 @@
 import React, { useState } from 'react'
-import { handleEnter, dateForDayOfNextWeek, dateForNextRecurrence } from "../../functions"
+import { handleEnter, dateForDayOfNextWeek, dateForNextRecurrence, useStyles } from "../../functions"
+import { useParams } from "react-router-dom"
 import DatePicker from 'react-date-picker'
-import { Button } from "@material-ui/core"
+import { Button, TextField, FormControl, Select } from "@material-ui/core"
 import { Checkbox } from "antd";
 
 const RecurringTaskForm = ({ onSubmit, popupState }) => {
-    const goal = JSON.parse(localStorage.getItem('currentGoal'));
+    const { id } = useParams()
+    const classes = useStyles()
     const [showNotesForm, setShowNotesForm] = useState(false)
-    const [title, setTitle] = useState("")
+    const [name, setName] = useState("")
+    const [notes, setNotes] = useState("")
+    // compute recur info
     const [startDate, setStartDate] = useState(new Date())
     const [recurEvery, setRecurEvery] = useState('wk')
     const [checkedDays, setCheckedDays] = useState([])
     const [endAfter, setEndAfter] = useState("countReached")
     const [endDate, setEndDate] = useState(new Date())
     const [count, setCount] = useState(0)
-    const [notes, setNotes] = useState("")
 
-    const onClick  = () => {
+    const onClick = () => {
+        popupState.close()
+
         let dates = []
         let dateInc = startDate
-    
+
         if (endAfter === "countReached") {
             for (let i = 0; i < count; i++) {
                 if (recurEvery === "wk") {
@@ -45,7 +50,7 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
                     }
                     for (let day of checkedDays) {
                         dateInc = dateForDayOfNextWeek(dateInc, day)
-                        dateInc.getTime() <= endDate.getTime() && dates.push(dateInc) 
+                        dateInc.getTime() <= endDate.getTime() && dates.push(dateInc)
                     }
                 } else {
                     dates.push(dateInc)
@@ -60,147 +65,142 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
 
         const computeRecurDatesInfo = { startDate, recurEvery, checkedDays, endAfter, endDate, count }
 
-        onSubmit({title, type: 'recurring', dates, notes, goalId: goal._id, computeRecurDatesInfo })
-
+        onSubmit({ name, type: 'recurring', dates, notes, computeRecurDatesInfo, goalId: id })
     }
 
     return (
-        <div style={{  overflowY: "scroll",  height: "300px", width: "auto" }}>
-
-            <div className="small-form-group" >
-                <label>
-                    <h4>Your Task:</h4>
-                    <input
-                        type="text"
-                        placeholder="Name"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </label>
+        <div className="task-form">
+            <div onKeyDown={handleEnter}>
+                <p>Task name:</p>
+                <TextField
+                    variant="outlined"
+                    classes={{ root: classes.taskInput }}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
             </div>
-
-            <div className="small-form-group"  onKeyDown={handleEnter}>
-                <label>
-                    <h4>Start on:</h4>
-                    <DatePicker
-                        value={startDate}
-                        showTimeSelect
-                        onSelect={(date) => setStartDate(date)}
-                        onChange={(date) => setStartDate(date)}
-                    />
-                </label>
+            <div onKeyDown={handleEnter}>
+                <p>Start on:</p>
+                <DatePicker
+                    value={startDate}
+                    showTimeSelect
+                    onSelect={(date) => setStartDate(date)}
+                    onChange={(date) => setStartDate(date)}
+                />
             </div>
-
-            <div style={{ display: "flex", justifyItems: "left" }}>
-            <div className="small-form-group"  style={{ flex: 1 }}>
-                <label>
-                    <h4>Recur every:</h4>
-                    <select className="sub-btn" onChange={(e) => setRecurEvery(e.target.value)}>
+            <div className="recurring-task-recur-every">
+                <p>Recur every:</p>
+                <FormControl variant="outlined" className={classes.dropDown}>
+                    <Select
+                        native
+                        value={recurEvery}
+                        onChange={(e) => setRecurEvery(e.target.value)}
+                    >
                         <option value="wk">Week</option>
                         <option value="fn">Fortnight</option>
                         <option value="fw">Four weeks</option>
                         <option value="mth">Month</option>
                         <option value="yr">Year</option>
-                    </select>
-                </label>
+                    </Select>
+                </FormControl>
+                {
+                    recurEvery === 'wk' &&
+                    <Checkbox.Group
+                        className="day-type-checkboxes"
+                        onChange={(checkedValues) => setCheckedDays(checkedValues)} >
+                        <Checkbox value="0"> Sun</Checkbox>
+                        <Checkbox value="1"> Mon</Checkbox>
+                        <Checkbox value="2"> Tues</Checkbox>
+                        <Checkbox value="3"> Wed</Checkbox>
+                        <Checkbox value="4"> Thurs</Checkbox>
+                        <Checkbox value="5"> Fri</Checkbox>
+                        <Checkbox value="6"> Sat</Checkbox>
+                    </Checkbox.Group>
+                }
             </div>
-
-            {
-                recurEvery === 'wk' &&
-                <Checkbox.Group onChange={(checkedValues) => setCheckedDays(checkedValues)} style={{ flex: 2, paddingTop: "30px" }}>
-                    <Checkbox style={{ padding: "5px" }} value="0"> Sun</Checkbox>
-                    <Checkbox style={{ padding: "5px" }} value="1"> Mon</Checkbox>
-                    <Checkbox style={{ padding: "5px" }} value="2"> Tues</Checkbox>
-                    <Checkbox style={{ padding: "5px" }} value="3"> Wed</Checkbox>
-                    <br />
-                    <Checkbox style={{ padding: "5px" }} value="4"> Thurs</Checkbox>
-                    <Checkbox style={{ padding: "5px" }} value="5"> Fri</Checkbox>
-                    <Checkbox style={{ padding: "5px" }} value="6"> Sat</Checkbox>
-                </Checkbox.Group>
-            }
-            </div>
-
-            <div style={{ display: "flex", justifyItems: "left" }}>
-            <div className="small-form-group" style={{ flex: 2 }}>
-                <label>
-                    <h4>End after:</h4>
-                    <select className="sub-btn" onChange={(e) => setEndAfter(e.target.value)}>
-                        <option value="countReached">Count Reached</option>
-                        <option value="dateReached">Date Reached</option>
-                    </select>
-                </label>
-            </div>
-
-            {
-                endAfter === "dateReached" &&
-                <div className="small-form-group"  onKeyDown={handleEnter} style={{ flex: 3 }}>
-                    <label>
-                        <h4>End on:</h4>
+            <div className="recurring-task-end-after">
+                <div>
+                    <p>End after:</p>
+                    <FormControl variant="outlined" className={classes.dropDown}>
+                        <Select
+                            native
+                            value={endAfter}
+                            onChange={(e) => setEndAfter(e.target.value)}
+                        >
+                            <option value="countReached">Count Reached</option>
+                            <option value="dateReached">Date Reached</option>
+                        </Select>
+                    </FormControl>
+                </div>
+                {
+                    endAfter === "dateReached" &&
+                    <div
+                        className="date-count"
+                        onKeyDown={handleEnter}
+                    >
+                        <p>Date:</p>
                         <DatePicker
                             value={endDate}
                             showTimeSelect
                             onSelect={(date) => setEndDate(date)}
                             onChange={(date) => setEndDate(date)}
                         />
-                    </label>
-                </div>
-            }
-
-            {
-                endAfter === "countReached" &&
-                <div className="small-form-group"  onKeyDown={handleEnter} style={{ flex: 3 }}>
-                    <label>
-                        <h4>Count:</h4>
-                        <input
-                            className="sub-btn"
+                    </div>
+                }
+                {
+                    endAfter === "countReached" &&
+                    <div onKeyDown={handleEnter}>
+                        <p>Count:</p>
+                        <TextField
                             type="number"
-                            placeholder="Count"
+                            variant="outlined"
+                            classes={{ root: classes.taskInput }}
                             value={count}
                             onChange={(e) => setCount(e.target.value)}
                         />
-                    </label>
-                </div>
-            }
+                    </div>
+                }
             </div>
-
-            <Button color="default" variant="outlined" onClick={() => setShowNotesForm(true)}>
-                    ADD NOTES
-            </Button>
-        
-            {
-                showNotesForm &&
-                <div className="small-form-group" style={{ padding: "10px" }} onKeyDown={handleEnter}>
+            <div onKeyDown={handleEnter}>
+                {
+                    !showNotesForm &&
+                    <Button
+                        classes={{ root: classes.subBlueButton }}
+                        onClick={() => setShowNotesForm(true)}
+                    >
+                        ADD NOTES
+                    </Button>
+                }
+                {
+                    showNotesForm &&
                     <label>
-                        <h4>Notes: (Opt)</h4>
-                        <textarea
-                            placeholder="Your notes"
+                        <p>Notes:</p>
+                        <TextField
+                            classes={{ root: classes.taskInput }}
+                            multiline={true}
+                            placeholder="Notes"
+                            variant="outlined"
+                            rows={4}
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
-                            rows={5}
-                            cols={50}
                         />
                     </label>
-                </div>
-            }
-            <br />
-            <Button style={{
-                    display: "block", background: "none",
-                    float: "left", border: "none", padding: "none",
-                    color: "#0290B0", textDecoration: "underline", padding: "10px 10px",
-                    margin: "5px", marginTop: "30px"
-                }} onClick={popupState.close}>
-                    Cancel
-                
-            </Button>
-
-            <Button style={{ backgroundColor: '#0290B0', color: 'white', padding: "10px 10px",
-                    margin: "20px", float: "right" }} variant="contained" onClick={() => {
-                popupState.close()
-                onClick()
-            }}>
-                SAVE
-            </Button>
-
+                }
+            </div>
+            <div className="task-form-btn-container">
+                <Button
+                    classes={{ root: classes.cancelButton }}
+                    onClick={popupState.close}
+                >
+                    CANCEL
+                </Button>
+                <Button
+                    classes={{ root: classes.blueButton }}
+                    onClick={onClick}
+                >
+                    SAVE
+                </Button>
+            </div>
         </div>
     )
 }

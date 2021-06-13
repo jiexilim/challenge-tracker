@@ -1,13 +1,13 @@
 import React from 'react'
-import { Modal, Backdrop, Fade, Button } from '@material-ui/core'
-import { modalStyles } from "../../functions"
+import { Modal, Backdrop, Fade } from '@material-ui/core'
+import { useStyles } from "../../functions"
 import { FaTimes } from "react-icons/fa"
 
 const ModalForm = ({ openForm, closeForm, FormComponent }) => {
-    const classes = modalStyles()
+    const classes = useStyles()
     return (
         <Modal
-            className={classes.modal}
+            className={classes.modalStyles.modal}
             open={openForm}
             onClose={closeForm}
             closeAfterTransition
@@ -17,12 +17,12 @@ const ModalForm = ({ openForm, closeForm, FormComponent }) => {
             }}
         >
             <Fade in={openForm}>
-                <div className={classes.view}>
-                    <div className={classes.paper}>
+                <div className={classes.modalStyles.view}>
+                    <div className={classes.modalStyles.paper}>
                         {<FormComponent closeForm={closeForm} />}
                     </div>
-                    <FaTimes 
-                        className={classes.cross}
+                    <FaTimes
+                        className={classes.modalStyles.cross}
                         size={50}
                         onClick={closeForm} />
                 </div>

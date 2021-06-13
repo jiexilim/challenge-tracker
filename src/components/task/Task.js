@@ -5,115 +5,139 @@ import { MdReplay } from "react-icons/md"
 import { AiOutlineUnorderedList } from "react-icons/ai"
 import { useServer } from "../../Server"
 import Subtask from "./Subtask"
-import { Popover, Button } from '@material-ui/core'
+import { useStyles } from "../../functions"
+import { Popover, Button, Checkbox, TextField } from '@material-ui/core'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
 import axios from "axios"
 
-const Task = ({ target, onEdit, onCheck }) => {
+const Task = ({ task }) => {
     const serverURL = useServer()
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ]
+    const classes = useStyles()
     const [showSubtasks, setShowSubtasks] = useState(false)
     const [showRecurProgress, setShowRecurProgress] = useState(false)
     const [numCompleted, setNumCompleted] = useState(0)
     const [numSkipped, setNumSkipped] = useState(0)
     const [completeAction, setCompleteAction] = useState(true)
 
-    const onCheckSubtask = (subtask) => {
-        let countCompletedSubtask = 0
-        for (let sub of target.subtasks) {
+    const checkTask = () => {
+        axios.post(serverURL + `/task/update/${task._id}`, {
+            name: task.name,
+            type: "single",
+            endDate: task.endDate,
+            subtasks: task.subtasks,
+            notes: task.notes,
+            isCompleted: !(task.isCompleted),
+        })
+            .then(res => console.log(res.data))
+    }
+
+    const checkSubtask = (subtask) => {
+        let numCompletedSubtask = 0
+        for (let sub of task.subtasks) {
             if (sub.id === subtask.id) {
                 sub.isCompleted = !(sub.isCompleted)
             }
             if (sub.isCompleted) {
-                countCompletedSubtask += 1
+                numCompletedSubtask += 1
             }
         }
 
-        if (countCompletedSubtask === target.subtasks.length) {
-            target.isCompleted = true
+        if (numCompletedSubtask === task.subtasks.length) {
+            task.isCompleted = true
         } else {
-            target.isCompleted = false
+            task.isCompleted = false
         }
-        axios.post(serverURL + "/target/edit",
-            {
-                title: target.title,
-                type: "single",
-                endDate: target.endDate,
-                subtasks: target.subtasks,
-                isCompleted: target.isCompleted,
-                targetId: target._id
-            }
-        ).then(res => console.log(res.data))
+        axios.post(serverURL + `/task/update/${task._id}`, {
+            name: task.name,
+            type: "single",
+            endDate: task.endDate,
+            subtasks: task.subtasks,
+            notes: task.notes,
+            isCompleted: task.isCompleted,
+        })
+            .then(res => console.log(res.data))
     }
 
     const onSaveRecurProgress = () => {
-        setShowRecurProgress(false)
-        target.numCompleted = Number(target.numCompleted) + Number(numCompleted)
+        // complete
+        const newNumCompleted = Number(task.numCompleted) + Number(numCompleted)
+        let updateIsCompleted = false
 
-        if (target.numCompleted === target.dates.length) {
-            target.isCompleted = true
-        } else {
-            target.isCompleted = false
+        // skip
+        let newDates = task.dates
+        if (numSkipped > 0) {
+            newDates = task.dates.splice(task.numCompleted, numSkipped)
+        }
+
+        if (newNumCompleted === task.dates.length) {
+            updateIsCompleted = true
         }
 
         setNumSkipped(0)
         setNumCompleted(0)
 
-        axios.post(serverURL + "/target/edit",
+        axios.post(serverURL + `/task/update/${task._id}`,
             {
-                title: target.title,
+                name: task.name,
                 type: "recurring",
-                numCompleted: target.numCompleted,
-                dates: target.dates,
-                isCompleted: target.isCompleted,
-                targetId: target._id
+                dates: newDates,
+                numCompleted: newNumCompleted,
+                computeRecurDatesInfo: task.computeRecurDatesInfo,
+                notes: task.notes,
+                isCompleted: updateIsCompleted,
             }
         ).then(res => console.log(res.data));
     }
 
     return (
-        <div>
-            <div style={{ margin: '20px 0', flexDirection: 'row', display: "flex", width: "60%", alignItems: "center", borderBottom: "solid grey", borderWidth: "thin" }}>
-                <span style={{ flex: 4 }}>
+        <div className="whole-task-container">
+            <div className="main-task-container">
+                <div className="task-type-icon">
                     {
-                        target.type === "recurring" ?
-                            <MdReplay style={{ cursor: 'pointer', marginLeft: "10px", marginRight: "20px" }} onClick={() => setShowRecurProgress(!showRecurProgress)} /> :
-                            target.subtasks.length === 0 ?
-                                <input
-                                    style={{ cursor: 'pointer', marginLeft: "10px", marginRight: "20px" }}
-                                    type="checkbox"
-                                    checked={target.isCompleted}
-                                    onChange={() => onCheck(target)}
-                                /> : <AiOutlineUnorderedList style={{ cursor: 'pointer', marginLeft: "10px", marginRight: "20px" }} onClick={() => setShowSubtasks(!showSubtasks)} />
+                        task.type === "recurring" ?
+                            <Button>
+                                <MdReplay
+                                    size={20}
+                                    onClick={() => setShowRecurProgress(!showRecurProgress)}
+                                />
+                            </Button>
+                            :
+                            task.subtasks.length === 0 ?
+                                <Checkbox
+                                    classes={{ root: classes.checkBox }}
+                                    checked={task.isCompleted}
+                                    onChange={checkTask}
+                                /> :
+                                <Button>
+                                    <AiOutlineUnorderedList
+                                        size={20}
+                                        onClick={() => setShowSubtasks(!showSubtasks)}
+                                    />
+                                </Button>
                     }
-
-                    <h3
-                        style={{ textDecorationLine: target.isCompleted ? 'line-through' : 'none', display: "inline-block" }}>
-                        {target.title}
-                    </h3>
-                </span>
-                <h5
-                    style={{ flex: 1 }}>
-
+                </div>
+                <h3 className="task-name">{task.name}</h3>
+                <h5 className="task-date-completed">
                     {
-                        target.isCompleted ? <h3 style={{ color: "#0290B0" }}>Completed !</h3> :
-                            (target.type === "recurring" ?
-                                new Date(target.dates[target.numCompleted]).getDate()
-                                + "   " + monthNames[new Date(target.endDate).getMonth()]
-                                + "   " + new Date(target.endDate).getFullYear() :
-                                new Date(target.endDate).getDate()
-                                + "   " + monthNames[new Date(target.endDate).getMonth()]
-                                + "   " + new Date(target.endDate).getFullYear())
+                        task.isCompleted ?
+                            <h3>Completed !</h3> :
+                            (task.type === "recurring" ?
+                                new Date(task.dates[task.numCompleted]).getDate()
+                                + "   " + monthNames[new Date(task.endDate).getMonth()]
+                                + "   " + new Date(task.endDate).getFullYear() :
+                                new Date(task.endDate).getDate()
+                                + "   " + monthNames[new Date(task.endDate).getMonth()]
+                                + "   " + new Date(task.endDate).getFullYear())
                     }
                 </h5>
-
                 <PopupState variant="popover" popupId="popup-popover">
                     {(popupState) => (
-                        <div>
+                        <div className="popup-edit">
                             <Button {...bindTrigger(popupState)}>
-                                <FaEdit style={{ color: 'grey', cursor: 'pointer', flex: 1 }} />
+                                <FaEdit className="task-edit-icon" />
                             </Button>
                             <Popover
                                 {...bindPopover(popupState)}
@@ -126,8 +150,7 @@ const Task = ({ target, onEdit, onCheck }) => {
                                     horizontal: 'left',
                                 }}
                             >
-                                <EditTaskForm popupState={popupState} task={target}/>
-
+                                <EditTaskForm popupState={popupState} task={task} />
                             </Popover>
                         </div>
                     )}
@@ -136,54 +159,67 @@ const Task = ({ target, onEdit, onCheck }) => {
 
             {
                 showSubtasks &&
-                <div style={{ borderLeft: "1px solid grey", borderBottom: "1px solid grey", width: "60%" }}>
+                <div>
                     {
-                        target.subtasks.map((subtask, index) =>
-                            <Subtask key={index} subtask={subtask} onCheck={onCheckSubtask} />)
+                        task.subtasks.map((subtask, index) =>
+                            <Subtask key={index} subtask={subtask} onCheck={checkSubtask} />)
                     }
                 </div>
             }
-
             {
                 showRecurProgress &&
-                <div className="small-form-group" style={{ borderLeft: "1px solid grey", borderBottom: "1px solid grey", width: "60%" }}>
-                    <div style={{ marginLeft: "40px", paddingBottom: "10px", borderBottom: "solid #ccc", borderWidth: "thin" }}>
-                        <button type="button" className="sub-btn" onClick={() => {
-                            setCompleteAction(true)
-                        }}>Complete</button>
-                        <button type="button" className="sub-btn" onClick={() => {
-                            setCompleteAction(false)
-                        }}>Skip</button>
-                        {
-                        completeAction ?
-                        <label>
-                        <h4>Complete: </h4>
-                        <input
-                            type="number"
-                            style={{ width: "100px" }}
-                            value={numCompleted}
-                            onChange={(e) => setNumCompleted(e.target.value)}
-                        />
-                        </label> :
-                        <label>
-                        <h4>Skip: </h4>
-                        <input
-                            type="number"
-                            style={{ width: "100px" }}
-                            value={numSkipped}
-                            onChange={(e) => setNumSkipped(e.target.value)}
-                        />
-                        </label>
-                        }
-                        <h4> Progress: {target.numCompleted} of {target.dates.length} instances completed </h4>
-                        <input type="button" value="Save" className="sub-btn"
-                            style={{ display: "block", backgroundColor: "#0290B0", display: "block" }} onClick={onSaveRecurProgress} />
+                <div className="recur-task-data">
+                    <div className="recur-task-data-btn-container">
+                        <Button
+                            classes={{ root: completeAction ? classes.clickedCompleteSkipButton : classes.completeSkipButton }}
+                            variant="contained"
+                            onClick={() => setCompleteAction(true)}
+                        >
+                            Complete
+                        </Button>
+                        <Button
+                            classes={{ root: !completeAction ? classes.clickedCompleteSkipButton : classes.completeSkipButton }}
+                            variant="contained"
+                            onClick={() => setCompleteAction(false)}
+                        >
+                            Skip
+                        </Button>
                     </div>
-                </div>
+                    {
+                        completeAction ?
+                            <label className="complete-skip-input">
+                                <p>Complete: </p>
+                                <TextField
+                                    type="number"
+                                    variant="outlined"
+                                    classes={{ root: classes.taskInput }}
+                                    value={numCompleted}
+                                    onChange={(e) => setNumCompleted(e.target.value)}
+                                />
+                            </label> :
+                            <label className="complete-skip-input">
+                                <p>Skip: </p>
+                                <TextField
+                                    type="number"
+                                    variant="outlined"
+                                    classes={{ root: classes.taskInput }}
+                                    value={numSkipped}
+                                    onChange={(e) => setNumSkipped(e.target.value)}
+                                />
+                            </label>
+                    }
+                    <div className="recur-task-info">
+                        <p> Progress: {task.numCompleted} of {task.dates.length} instances completed </p>
+                        <Button
+                            classes={{ root: classes.blueButton }}
+                            onClick={onSaveRecurProgress}
+                        >
+                            SAVE
+                        </Button>
+                    </div>
+                </div >
             }
-
-
-        </div>
+        </div >
     )
 }
 

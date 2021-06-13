@@ -7,11 +7,11 @@ import ModalForm from "./ModalForm"
 import jwt from "jsonwebtoken"
 import axios from "axios"
 import { Button } from '@material-ui/core'
-import { blueButton } from "../../functions"
+import { useStyles } from "../../functions"
 
 const Dashboard = ({ history }) => {
     const serverURL = useServer()
-    const classes = blueButton()
+    const classes = useStyles()
     const [goals, setGoals] = useState([])
     const [openForm, setOpenForm] = useState(false)
 
@@ -32,17 +32,17 @@ const Dashboard = ({ history }) => {
     if (goals.length === 0) {
         return (
             <div className="content">
-                <Button 
-                    classes={{ root: classes.root }}
-                    variant="contained" 
+                <Button
+                    classes={{ root: classes.mainBlueButton }}
+                    variant="contained"
                     onClick={() => setOpenForm(true)}
                 >
                     ADD YOUR FIRST GOAL
                 </Button>
-                <ModalForm 
-                    openForm={openForm} 
-                    closeForm={()=>setOpenForm(false)} 
-                    FormComponent={CreateGoal} 
+                <ModalForm
+                    openForm={openForm}
+                    closeForm={() => setOpenForm(false)}
+                    FormComponent={CreateGoal}
                 />
             </div >
         )

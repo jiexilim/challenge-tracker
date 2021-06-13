@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
 const ProgressBar = ({ percent, completed, due }) => {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(0)
 
     useEffect(() => {
-        setValue(Number(percent) * 500);
+        setValue(Number(percent) * 500)
     });
 
     return (
