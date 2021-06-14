@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import ProgressBar from "../admin/ProgressBar";
 import EditGoal from "./EditGoal"
 import { withRouter } from "react-router-dom";
@@ -7,9 +7,9 @@ import { Button } from "@material-ui/core"
 
 const GoalViewHeader = ({ goal, progress, numOfTasks }) => {
     const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"]
+        "July", "August", "September", "October", "November", "December"]
     const [openForm, setOpenForm] = useState(false)
-   
+
     return (
         (!openForm) ?
             <div id="goal-view-header">
@@ -17,9 +17,8 @@ const GoalViewHeader = ({ goal, progress, numOfTasks }) => {
                     <h2>
                         {goal.name}
                         <Button onClick={() => setOpenForm(true)}>
-                            <FaEdit 
-                                id="edit-icon" 
-                                size={20}
+                            <FaEdit
+                                id="edit-icon"
                             />
                         </Button>
                     </h2>

@@ -124,6 +124,14 @@ export const useStyles = makeStyles((theme) => ({
         padding: "0px !important",
         color: "#0290B0 !important"
     },
+    subCheckBox: {
+        color: "#0290B0 !important",
+    },
+    daysLabel: {
+        fontFamily: "Product Sans !important",
+        fontSize: "15px !important",
+        letterSpacing: "2px !important",
+    },
     completeSkipButton: {
         '&:hover': {
             background: "rgba(98, 138, 138, 1) !important",
@@ -140,4 +148,5 @@ export const useStyles = makeStyles((theme) => ({
         background: "rgba(98, 138, 138, 1) !important",
         color: "white !important",
     },
+
 }))

@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { handleEnter, dateForDayOfNextWeek, dateForNextRecurrence, useStyles } from "../../functions"
 import DatePicker from 'react-date-picker'
-import { Checkbox } from "antd";
-import { Button, TextField, FormControl, Select } from "@material-ui/core"
+import { Button, TextField, FormControl, Select, FormControlLabel, FormGroup, Checkbox } from "@material-ui/core"
 
 const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
     const classes = useStyles()
@@ -16,6 +15,7 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
     const [startDate, setStartDate] = useState(task.computeRecurDatesInfo.startDate)
     const [recurEvery, setRecurEvery] = useState(task.computeRecurDatesInfo.recurEvery)
     const [checkedDays, setCheckedDays] = useState(task.computeRecurDatesInfo.checkedDays)
+    const { sun, mon, tue, wed, thu, fri, sat } = checkedDays
     const [endAfter, setEndAfter] = useState(task.computeRecurDatesInfo.endAfter)
     const [endDate, setEndDate] = useState(task.computeRecurDatesInfo.endDate)
     const [count, setCount] = useState(task.computeRecurDatesInfo.count)
@@ -74,6 +74,11 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
         onSubmit({ name, type: 'recurring', dates, numCompleted, computeRecurDatesInfo, notes, isCompleted })
     }
 
+    const onCheck = (event) => {
+        setCheckedDays({ ...checkedDays, [event.target.name]: event.target.checked });
+    }
+
+
     return (
         <div className="task-form">
             <div onKeyDown={handleEnter}>
@@ -111,19 +116,91 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                 </FormControl>
                 {
                     recurEvery === 'wk' &&
-                    <Checkbox.Group
-                        className="day-type-checkboxes"
-                        defaultValue={checkedDays}
-                        onChange={(checkedValues) => setCheckedDays(checkedValues)}
-                    >
-                        <Checkbox value="0"> Sun</Checkbox>
-                        <Checkbox value="1"> Mon</Checkbox>
-                        <Checkbox value="2"> Tues</Checkbox>
-                        <Checkbox value="3"> Wed</Checkbox>
-                        <Checkbox value="4"> Thurs</Checkbox>
-                        <Checkbox value="5"> Fri</Checkbox>
-                        <Checkbox value="6"> Sat</Checkbox>
-                    </Checkbox.Group>
+                    <FormGroup row>
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={sun}
+                                onChange={onCheck}
+                                name="sun"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Sun"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={mon}
+                                onChange={onCheck}
+                                name="mon"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Mon"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={tue}
+                                onChange={onCheck}
+                                name="tue"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Tue"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={wed}
+                                onChange={onCheck}
+                                name="wed"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Wed"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={thu}
+                                onChange={onCheck}
+                                name="thu"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Thu"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={fri}
+                                onChange={onCheck}
+                                name="fri"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Fri"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={sat}
+                                onChange={onCheck}
+                                name="sat"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Sat"
+                        />
+                    </FormGroup>
+                    // <Checkbox.Group
+                    //     className="day-type-checkboxes"
+                    //     defaultValue={checkedDays}
+                    //     onChange={(checkedValues) => setCheckedDays(checkedValues)}
+                    // >
+                    //     <Checkbox value="0"> Sun</Checkbox>
+                    //     <Checkbox value="1"> Mon</Checkbox>
+                    //     <Checkbox value="2"> Tues</Checkbox>
+                    //     <Checkbox value="3"> Wed</Checkbox>
+                    //     <Checkbox value="4"> Thurs</Checkbox>
+                    //     <Checkbox value="5"> Fri</Checkbox>
+                    //     <Checkbox value="6"> Sat</Checkbox>
+                    // </Checkbox.Group>
                 }
             </div>
             <div className="recurring-task-end-after">

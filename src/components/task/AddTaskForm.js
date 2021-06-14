@@ -24,7 +24,7 @@ const AddTaskForm = ({ popupState }) => {
     }
 
     return (
-        <div id="add-task-form">
+        <div className="task-form-wrapper">
             <Button
                 classes={{ root: type === "single" ? classes.clickedTaskTypeButton : classes.taskTypeButton }}
                 onClick={() => setType("single")}

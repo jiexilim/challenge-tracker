@@ -536,7 +536,7 @@ p {
 
 /* add task form */
 
-#add-task-form {
+.task-form-wrapper {
 	width: 400px;
 }
 

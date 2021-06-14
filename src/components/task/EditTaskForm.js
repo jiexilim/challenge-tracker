@@ -21,7 +21,7 @@ const EditTaskForm = ({ popupState, task }) => {
     }
 
     return (
-        <div>
+        <div className="task-form-wrapper">
             {task.type === "recurring" ?
                 <EditRecurringTask task={task} onSubmit={onSubmit} onDelete={deleteTask} popupState={popupState} /> :
                 <EditSingleTask task={task} onSubmit={onSubmit} onDelete={deleteTask} popupState={popupState} />}

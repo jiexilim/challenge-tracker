@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { handleEnter, dateForDayOfNextWeek, dateForNextRecurrence, useStyles } from "../../functions"
 import { useParams } from "react-router-dom"
 import DatePicker from 'react-date-picker'
-import { Button, TextField, FormControl, Select } from "@material-ui/core"
-import { Checkbox } from "antd";
+import { Button, TextField, FormControl, Select, FormControlLabel, FormGroup, Checkbox } from "@material-ui/core"
 
 const RecurringTaskForm = ({ onSubmit, popupState }) => {
     const { id } = useParams()
@@ -14,7 +13,16 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
     // compute recur info
     const [startDate, setStartDate] = useState(new Date())
     const [recurEvery, setRecurEvery] = useState('wk')
-    const [checkedDays, setCheckedDays] = useState([])
+    const [checkedDays, setCheckedDays] = useState({
+        sun: false,
+        mon: false,
+        tue: false,
+        wed: false,
+        thu: false,
+        fri: false,
+        sat: false,
+    })
+    const { sun, mon, tue, wed, thu, fri, sat } = checkedDays
     const [endAfter, setEndAfter] = useState("countReached")
     const [endDate, setEndDate] = useState(new Date())
     const [count, setCount] = useState(0)
@@ -68,6 +76,10 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
         onSubmit({ name, type: 'recurring', dates, notes, computeRecurDatesInfo, goalId: id })
     }
 
+    const onCheck = (event) => {
+        setCheckedDays({ ...checkedDays, [event.target.name]: event.target.checked });
+    }
+
     return (
         <div className="task-form">
             <div onKeyDown={handleEnter}>
@@ -105,17 +117,78 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
                 </FormControl>
                 {
                     recurEvery === 'wk' &&
-                    <Checkbox.Group
-                        className="day-type-checkboxes"
-                        onChange={(checkedValues) => setCheckedDays(checkedValues)} >
-                        <Checkbox value="0"> Sun</Checkbox>
-                        <Checkbox value="1"> Mon</Checkbox>
-                        <Checkbox value="2"> Tues</Checkbox>
-                        <Checkbox value="3"> Wed</Checkbox>
-                        <Checkbox value="4"> Thurs</Checkbox>
-                        <Checkbox value="5"> Fri</Checkbox>
-                        <Checkbox value="6"> Sat</Checkbox>
-                    </Checkbox.Group>
+                    <FormGroup row>
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={sun}
+                                onChange={onCheck}
+                                name="sun"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Sun"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={mon}
+                                onChange={onCheck}
+                                name="mon"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Mon"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={tue}
+                                onChange={onCheck}
+                                name="tue"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Tue"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={wed}
+                                onChange={onCheck}
+                                name="wed"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Wed"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={thu}
+                                onChange={onCheck}
+                                name="thu"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Thu"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={fri}
+                                onChange={onCheck}
+                                name="fri"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Fri"
+                        />
+                        <FormControlLabel
+                            classes={{ label: classes.daysLabel }}
+                            control={<Checkbox
+                                checked={sat}
+                                onChange={onCheck}
+                                name="sat"
+                                className={classes.subCheckBox}
+                            />}
+                            label="Sat"
+                        />
+                    </FormGroup>
                 }
             </div>
             <div className="recurring-task-end-after">
