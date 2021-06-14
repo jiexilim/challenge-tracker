@@ -408,7 +408,6 @@ p {
 	display: flex;
 	z-index: 1000;
 	padding: 0px 10px;
-	/* position: absolute; */
 }
 
 #progress {
