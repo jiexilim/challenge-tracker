@@ -19,7 +19,7 @@ const Layout = () => {
             <Router history={history}>
                 <div className="wrapper">
                     <Sidebar />
-                    <div className={ localStorage.getItem("userAccess") ? "left-content": "left-content-bfr-auth" }>
+                    <div className={localStorage.getItem("userAccess") ? "left-content" : "left-content-bfr-auth"}>
                         <Header />
                         <Switch>
                             <Route exact path="/" component={Home} />

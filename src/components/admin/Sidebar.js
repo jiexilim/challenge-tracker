@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from "react-router-dom"
 import { useAuth } from "../../auth/ProvideAuth"
 import { AiFillHome } from "react-icons/ai"
-import SignOutButton from "./SignOutButton"
 
 const Sidebar = () => {
     useAuth()

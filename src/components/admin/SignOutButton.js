@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, withRouter } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import { useAuth } from "../../auth/ProvideAuth"
 
 const SignoutButton = ({ history }) => {
