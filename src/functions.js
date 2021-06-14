@@ -79,29 +79,27 @@ export const useStyles = makeStyles((theme) => ({
         background: 'none !important',
         color: '#0290B0 !important',
     },
-    modalStyles: {
-        modal: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        paper: {
-            backgroundColor: "#fff",
-            boxShadow: "inset 0 0 2px #000000",
-            padding: "60px",
-            overflowY: "scroll",
-            width: '50%',
-        },
-        view: {
-            display: "flex",
-            height: "100%",
-            justifyContent: 'center',
-        },
-        cross: {
-            color: "white",
-            cursor: "pointer",
-            margin: "15px",
-        }
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: "#fff",
+        boxShadow: "inset 0 0 2px #000000",
+        padding: "60px",
+        overflowY: "scroll",
+        width: '50%',
+    },
+    view: {
+        display: "flex",
+        height: "100%",
+        justifyContent: 'center',
+    },
+    cross: {
+        color: "white",
+        cursor: "pointer",
+        margin: "15px",
     },
     createGoalInput: {
         width: "100%",

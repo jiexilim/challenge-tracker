@@ -5,9 +5,10 @@ import { FaTimes } from "react-icons/fa"
 
 const ModalForm = ({ openForm, closeForm, FormComponent }) => {
     const classes = useStyles()
+
     return (
         <Modal
-            className={classes.modalStyles.modal}
+            className={classes.modal}
             open={openForm}
             onClose={closeForm}
             closeAfterTransition
@@ -17,12 +18,12 @@ const ModalForm = ({ openForm, closeForm, FormComponent }) => {
             }}
         >
             <Fade in={openForm}>
-                <div className={classes.modalStyles.view}>
-                    <div className={classes.modalStyles.paper}>
+                <div className={classes.view}>
+                    <div className={classes.paper}>
                         {<FormComponent closeForm={closeForm} />}
                     </div>
                     <FaTimes
-                        className={classes.modalStyles.cross}
+                        className={classes.cross}
                         size={50}
                         onClick={closeForm} />
                 </div>
