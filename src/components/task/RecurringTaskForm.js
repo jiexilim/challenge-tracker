@@ -7,6 +7,7 @@ import { Button, TextField, FormControl, Select, FormControlLabel, FormGroup, Ch
 const RecurringTaskForm = ({ onSubmit, popupState }) => {
     const { id } = useParams()
     const classes = useStyles()
+    const dayOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     const [showNotesForm, setShowNotesForm] = useState(false)
     const [name, setName] = useState("")
     const [notes, setNotes] = useState("")
@@ -52,7 +53,7 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
         } else {
             while (dateInc.getTime() <= endDate.getTime()) {
                 if (recurEvery === "wk") {
-                    if (dates.length === 0 && checkedDays.includes(startDate.getDay().toString())) {
+                    if (dates.length === 0 && checkedDays[dayOfWeek[startDate.getDay()]]) {
                         dates.push(dateInc)
                         continue
                     }
