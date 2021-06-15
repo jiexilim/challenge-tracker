@@ -9,7 +9,6 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
     const [dates, setDates] = useState(task.dates)
     const [numCompleted, setNumCompleted] = useState(task.numCompleted)
     const [notes, setNotes] = useState(task.notes)
-    const taskId = task._id
     const isCompleted = task.isCompleted
     // compute recur info
     const [startDate, setStartDate] = useState(task.computeRecurDatesInfo.startDate)

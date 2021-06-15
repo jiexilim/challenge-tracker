@@ -6,7 +6,7 @@ import { useStyles } from "../../functions"
 import { Button } from '@material-ui/core'
 import axios from "axios"
 
-const AddTaskForm = ({ popupState }) => {
+const AddTaskForm = ({ popupState, onAddTask }) => {
     const serverURL = useServer()
     const classes = useStyles()
     const [type, setType] = useState("single")
@@ -20,7 +20,9 @@ const AddTaskForm = ({ popupState }) => {
 
     const onSubmit = (task) => {
         axios.post(serverURL + "/task/create", task)
-            .then(res => console.log(res.data));
+            .then(res => console.log(res.data))
+
+        onAddTask(task)
     }
 
     return (

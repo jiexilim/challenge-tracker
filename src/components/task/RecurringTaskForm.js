@@ -73,6 +73,7 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
         })
 
         const computeRecurDatesInfo = { startDate, recurEvery, checkedDays, endAfter, endDate, count }
+        alert('Submit')
 
         onSubmit({ name, type: 'recurring', dates, notes, computeRecurDatesInfo, goalId: id })
     }

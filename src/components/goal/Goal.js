@@ -31,7 +31,7 @@ const Goal = ({ goal, onAccess }) => {
 
     return (
         <div className="goal-task-container">
-            <div class="goal-container">
+            <div className="goal-container">
                 <span
                     className="access-goal"
                     onClick={() => onAccess(goal._id)}>

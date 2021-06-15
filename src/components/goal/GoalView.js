@@ -15,24 +15,34 @@ const GoalView = () => {
     const classes = useStyles()
     const [goal, setGoal] = useState({})
     const [tasks, setTasks] = useState([])
-    const [numOfTasks, setNumOfTasks] = useState(0)
+    const [numOfTasks, setNumOfTasks] = useState(tasks.length)
     const [progress, setProgress] = useState(0)
 
     useEffect(() => {
-        axios.get(serverURL + "/goal/" + id)
-            .then(res => setGoal(res.data.goal))
-            .catch(err => console.log(err))
+        const getData = async () => {
+            await axios.get(serverURL + "/goal/" + id)
+                .then(res => setGoal(res.data.goal))
+                .catch(err => console.log(err))
 
-        axios.get(serverURL + "/task/",
-            { params: { goalId: id } })
-            .then(res => {
-                setTasks(res.data)
-            })
-            .catch(err => console.log(err))
+            await axios.get(serverURL + "/task/", { params: { goalId: id } })
+                .then(res => {
+                    setTasks(res.data)
+                })
+                .catch(err => console.log(err))
+        }
+        getData()
+        updateProgressBar()
+    }, [tasks])
 
+    const onAddTask = (task) => {
+        setTasks([...tasks, task])
+        updateProgressBar()
+    }
+
+    const updateProgressBar = () => {
         setNumOfTasks(tasks.length)
         setProgress(tasks.filter((task) => task.isCompleted).length)
-    })
+    }
 
     return (
         <div className="content" id="goal-view">
@@ -62,7 +72,7 @@ const GoalView = () => {
                                 horizontal: 'left',
                             }}
                         >
-                            <AddTaskForm popupState={popupState} />
+                            <AddTaskForm popupState={popupState} onAddTask={onAddTask} />
                         </Popover>
                     </div>
                 )}

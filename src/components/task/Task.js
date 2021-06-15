@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import EditTaskForm from "./EditTaskForm"
 import { FaEdit } from "react-icons/fa"
 import { MdReplay } from "react-icons/md"
@@ -16,49 +16,56 @@ const Task = ({ task }) => {
         "July", "August", "September", "October", "November", "December"
     ]
     const classes = useStyles()
-    const [showSubtasks, setShowSubtasks] = useState(false)
+    const [showSubtasks, setShowSubtasks] = useState(true)
     const [showRecurProgress, setShowRecurProgress] = useState(false)
     const [numCompleted, setNumCompleted] = useState(0)
     const [numSkipped, setNumSkipped] = useState(0)
     const [completeAction, setCompleteAction] = useState(true)
 
-    const checkTask = () => {
+    const [isCompleted, setIsCompleted] = useState(task.isCompleted)
+    const [subtasks, setSubtasks] = useState(task.subtasks)
+
+    useEffect(() => {
         axios.post(serverURL + `/task/update/${task._id}`, {
             name: task.name,
             type: "single",
             endDate: task.endDate,
-            subtasks: task.subtasks,
+            subtasks: subtasks,
             notes: task.notes,
-            isCompleted: !(task.isCompleted),
+            isCompleted: isCompleted,
         })
             .then(res => console.log(res.data))
-    }
+    }, [isCompleted])
 
-    const checkSubtask = (subtask) => {
-        let numCompletedSubtask = 0
-        for (let sub of task.subtasks) {
-            if (sub.id === subtask.id) {
-                sub.isCompleted = !(sub.isCompleted)
-            }
-            if (sub.isCompleted) {
-                numCompletedSubtask += 1
-            }
-        }
+    useEffect(() => {
+        const numCompletedSubtask = subtasks.filter((subtask) => subtask.isCompleted).length
 
         if (numCompletedSubtask === task.subtasks.length) {
-            task.isCompleted = true
+            setIsCompleted(true)
         } else {
-            task.isCompleted = false
+            setIsCompleted(false)
         }
-        axios.post(serverURL + `/task/update/${task._id}`, {
-            name: task.name,
-            type: "single",
-            endDate: task.endDate,
-            subtasks: task.subtasks,
-            notes: task.notes,
-            isCompleted: task.isCompleted,
+    }, [subtasks])
+
+    const checkTask = () => {
+        setIsCompleted(!isCompleted)
+    }
+
+    const checkSubtask = (id, isCompleted) => {
+
+        const i = subtasks.findIndex(function (subtask) {
+            return subtask.id === id
         })
-            .then(res => console.log(res.data))
+
+        let copyOfSubtasks = [...subtasks]
+
+        let copyOfSubtask = { ...copyOfSubtasks[i] }
+
+        copyOfSubtask.isCompleted = isCompleted
+
+        copyOfSubtasks[i] = copyOfSubtask
+
+        setSubtasks(copyOfSubtasks)
     }
 
     const onSaveRecurProgress = () => {
@@ -103,18 +110,20 @@ const Task = ({ task }) => {
                                     size={20}
                                     onClick={() => setShowRecurProgress(!showRecurProgress)}
                                 />
-                            </Button>
-                            :
+                            </Button> :
                             task.subtasks.length === 0 ?
                                 <Checkbox
                                     classes={{ root: classes.checkBox }}
-                                    checked={task.isCompleted}
+                                    checked={isCompleted}
                                     onChange={checkTask}
                                 /> :
                                 <Button>
                                     <AiOutlineUnorderedList
                                         size={20}
-                                        onClick={() => setShowSubtasks(!showSubtasks)}
+                                    // onClick={(e) => {
+                                    //     e.stopPropagation()
+                                    //     setShowSubtasks(!showSubtasks)
+                                    // }}
                                     />
                                 </Button>
                     }
@@ -122,7 +131,7 @@ const Task = ({ task }) => {
                 <h3 className="task-name">{task.name}</h3>
                 <h5 className="task-date-completed">
                     {
-                        task.isCompleted ?
+                        isCompleted ?
                             <h3>Completed !</h3> :
                             (task.type === "recurring" ?
                                 new Date(task.dates[task.numCompleted]).getDate()
