@@ -5,13 +5,17 @@ import { Button, TextField, FormControl, Select, FormControlLabel, FormGroup, Ch
 
 const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
     const classes = useStyles()
+    const dayOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+
     const [name, setName] = useState(task.name)
     const [dates, setDates] = useState(task.dates)
     const [numCompleted, setNumCompleted] = useState(task.numCompleted)
-    const [notes, setNotes] = useState(task.notes)
+    const [notes, setNotes] = useState(!task.notes ? "" : task.notes)
     const isCompleted = task.isCompleted
     // compute recur info
-    const [startDate, setStartDate] = useState(task.computeRecurDatesInfo.startDate)
+
+    const [changeRecurInfo, setChangeRecurInfo] = useState(false)
+    const [startDate, setStartDate] = useState(new Date(task.computeRecurDatesInfo.startDate))
     const [recurEvery, setRecurEvery] = useState(task.computeRecurDatesInfo.recurEvery)
     const [checkedDays, setCheckedDays] = useState(task.computeRecurDatesInfo.checkedDays)
     const { sun, mon, tue, wed, thu, fri, sat } = checkedDays
@@ -24,20 +28,19 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
         let dates = []
         let dateInc = startDate
 
-        // if (recurEvery !== "wk") { setCheckedDays([]) }
-        const computeRecurDatesInfo = { startDate, recurEvery, checkedDays, endAfter, endDate, count }
-
-        if (JSON.stringify(computeRecurDatesInfo) !== JSON.stringify(task.computeRecurDatesInfo)) {
+        if (changeRecurInfo) {
+            const checkedDaysList = dayOfWeek.filter((day) => checkedDays[day])
             if (endAfter === "countReached") {
                 for (let i = 0; i < count; i++) {
                     if (recurEvery === "wk") {
-                        if (dates.length === 0 && checkedDays.includes(startDate.getDay().toString())) {
+                        if (dates.length === 0 && checkedDaysList.includes(dayOfWeek[startDate.getDay()])) {
                             dates.push(dateInc)
                             continue
                         }
-                        for (let day of checkedDays) {
+                        for (let day of checkedDaysList) {
                             dateInc = dateForDayOfNextWeek(dateInc, day)
                             dates.push(dateInc)
+
                         }
                     } else {
                         dates.push(dateInc)
@@ -45,15 +48,17 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                     }
                 }
             } else {
-                while (dateInc.getTime() <= new Date(endDate).getTime()) {
+                while (dateInc.getTime() <= endDate.getTime()) {
                     if (recurEvery === "wk") {
-                        if (dates.length === 0 && checkedDays.includes(startDate.getDay().toString())) {
+                        if (dates.length === 0 && checkedDays[dayOfWeek[startDate.getDay()]]) {
                             dates.push(dateInc)
                             continue
                         }
-                        for (let day of checkedDays) {
-                            dateInc = dateForDayOfNextWeek(dateInc, day)
-                            dateInc.getTime() <= endDate.getTime() && dates.push(dateInc)
+                        for (let day of dayOfWeek) {
+                            if (checkedDays[day]) {
+                                dateInc = dateForDayOfNextWeek(dateInc, day)
+                                dateInc.getTime() <= endDate.getTime() && dates.push(dateInc)
+                            }
                         }
                     } else {
                         dates.push(dateInc)
@@ -65,15 +70,17 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
             dates.sort((d1, d2) => {
                 return d1 - d2
             })
-
-            setDates(dates)
             setNumCompleted(0)
         }
-
-        onSubmit({ name, type: 'recurring', dates, numCompleted, computeRecurDatesInfo, notes, isCompleted })
+        onSubmit({
+            name, type: 'recurring', dates, numCompleted: 0,
+            computeRecurDatesInfo: { startDate, recurEvery, checkedDays, endAfter, endDate, count },
+            notes, isCompleted
+        })
     }
 
     const onCheck = (event) => {
+        setChangeRecurInfo(true)
         setCheckedDays({ ...checkedDays, [event.target.name]: event.target.checked });
     }
 
@@ -93,9 +100,10 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                 <p>Start on:</p>
                 <DatePicker
                     value={startDate}
-                    showTimeSelect
-                    onSelect={(date) => setStartDate(date)}
-                    onChange={(date) => setStartDate(date)}
+                    onChange={(date) => {
+                        setChangeRecurInfo(true)
+                        setStartDate(date)
+                    }}
                 />
             </div>
             <div className="recurring-task-recur-every">
@@ -104,7 +112,10 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                     <Select
                         native
                         value={recurEvery}
-                        onChange={(e) => setRecurEvery(e.target.value)}
+                        onChange={(e) => {
+                            setChangeRecurInfo(true)
+                            setRecurEvery(e.target.value)
+                        }}
                     >
                         <option value="wk">Week</option>
                         <option value="fn">Fortnight</option>
@@ -187,19 +198,6 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                             label="Sat"
                         />
                     </FormGroup>
-                    // <Checkbox.Group
-                    //     className="day-type-checkboxes"
-                    //     defaultValue={checkedDays}
-                    //     onChange={(checkedValues) => setCheckedDays(checkedValues)}
-                    // >
-                    //     <Checkbox value="0"> Sun</Checkbox>
-                    //     <Checkbox value="1"> Mon</Checkbox>
-                    //     <Checkbox value="2"> Tues</Checkbox>
-                    //     <Checkbox value="3"> Wed</Checkbox>
-                    //     <Checkbox value="4"> Thurs</Checkbox>
-                    //     <Checkbox value="5"> Fri</Checkbox>
-                    //     <Checkbox value="6"> Sat</Checkbox>
-                    // </Checkbox.Group>
                 }
             </div>
             <div className="recurring-task-end-after">
@@ -209,7 +207,10 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                         <Select
                             native
                             value={endAfter}
-                            onChange={(e) => setEndAfter(e.target.value)}
+                            onChange={(e) => {
+                                setChangeRecurInfo(true)
+                                setEndAfter(e.target.value)
+                            }}
                         >
                             <option value="countReached">Count Reached</option>
                             <option value="dateReached">Date Reached</option>
@@ -225,9 +226,10 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                         <p>Date:</p>
                         <DatePicker
                             value={endDate}
-                            showTimeSelect
-                            onSelect={(date) => setEndDate(date)}
-                            onChange={(date) => setEndDate(date)}
+                            onChange={(date) => {
+                                setChangeRecurInfo(true)
+                                setEndDate(date)
+                            }}
                         />
                     </div>
                 }
@@ -240,7 +242,10 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
                             variant="outlined"
                             classes={{ root: classes.taskInput }}
                             value={count}
-                            onChange={(e) => setCount(e.target.value)}
+                            onChange={(e) => {
+                                setChangeRecurInfo(true)
+                                setCount(e.target.value)
+                            }}
                         />
                     </div>
                 }

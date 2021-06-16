@@ -69,6 +69,8 @@ const Task = ({ task, onDelete }) => {
         if (task.type === "recurring") {
             if (numCompleted === dates.length) {
                 setIsCompleted(true)
+            } else {
+                setIsCompleted(false)
             }
         }
 
@@ -102,7 +104,11 @@ const Task = ({ task, onDelete }) => {
             setSubtasks(task.subtasks)
             setNotes(task.notes)
         } else {
-
+            setName(task.name)
+            setDates(task.dates)
+            setNumCompleted(task.numCompleted)
+            setNotes(task.notes)
+            setComputeRecurDatesInfo(task.computeRecurDatesInfo)
         }
     }
 

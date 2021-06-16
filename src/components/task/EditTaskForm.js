@@ -6,11 +6,8 @@ import axios from "axios"
 
 const EditTaskForm = ({ popupState, task, onDelete, onEditSubmit }) => {
     const serverURL = useServer()
-    const taskId = task._id
 
     const onSubmit = (task) => {
-        // axios.post(serverURL + `/task/update/${taskId}`, task)
-        //     .then(res => console.log(res.data))
         onEditSubmit(task)
     }
 
