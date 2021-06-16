@@ -24,10 +24,11 @@ export const dateForNextRecurrence = (date, recurEvery) => {
 }
 
 export const dateForDayOfNextWeek = (date, dayOfWeek) => {
+    const dayList = { 'sun': 0, 'mon': 1, 'tue': 2, 'wed': 3, 'thu': 4, 'fri': 5, 'sat': 6 }
     let nextDate = new Date(
         date.getFullYear(),
         date.getMonth(),
-        date.getDate() + (7 + dayOfWeek - date.getDay()) % 7)
+        date.getDate() + (7 + dayList[dayOfWeek] - date.getDay()) % 7)
 
     if (nextDate <= date)
         nextDate.setDate(nextDate.getDate() + 7)

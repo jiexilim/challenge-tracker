@@ -33,20 +33,21 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
 
         let dates = []
         let dateInc = startDate
+        const checkedDaysList = dayOfWeek.filter((day) => checkedDays[day])
 
         if (endAfter === "countReached") {
             for (let i = 0; i < count; i++) {
                 if (recurEvery === "wk") {
-                    if (dates.length === 0 && checkedDays[dayOfWeek[startDate.getDay()]]) {
+                    if (dates.length === 0 && checkedDaysList.includes(dayOfWeek[startDate.getDay()])) {
                         dates.push(dateInc)
                         continue
                     }
-                    for (let day of dayOfWeek) {
+                    for (let day of checkedDaysList) {
                         dateInc = dateForDayOfNextWeek(dateInc, day)
                         dates.push(dateInc)
+
                     }
                 } else {
-                    console.log(dates)
                     dates.push(dateInc)
                     dateInc = dateForNextRecurrence(dateInc, recurEvery)
                 }
