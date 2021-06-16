@@ -37,15 +37,16 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
         if (endAfter === "countReached") {
             for (let i = 0; i < count; i++) {
                 if (recurEvery === "wk") {
-                    if (dates.length === 0 && checkedDays.includes(startDate.getDay().toString())) {
+                    if (dates.length === 0 && checkedDays[dayOfWeek[startDate.getDay()]]) {
                         dates.push(dateInc)
                         continue
                     }
-                    for (let day of checkedDays) {
+                    for (let day of dayOfWeek) {
                         dateInc = dateForDayOfNextWeek(dateInc, day)
                         dates.push(dateInc)
                     }
                 } else {
+                    console.log(dates)
                     dates.push(dateInc)
                     dateInc = dateForNextRecurrence(dateInc, recurEvery)
                 }
@@ -57,9 +58,11 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
                         dates.push(dateInc)
                         continue
                     }
-                    for (let day of checkedDays) {
-                        dateInc = dateForDayOfNextWeek(dateInc, day)
-                        dateInc.getTime() <= endDate.getTime() && dates.push(dateInc)
+                    for (let day of dayOfWeek) {
+                        if (checkedDays[day]) {
+                            dateInc = dateForDayOfNextWeek(dateInc, day)
+                            dateInc.getTime() <= endDate.getTime() && dates.push(dateInc)
+                        }
                     }
                 } else {
                     dates.push(dateInc)
@@ -73,9 +76,8 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
         })
 
         const computeRecurDatesInfo = { startDate, recurEvery, checkedDays, endAfter, endDate, count }
-        alert('Submit')
 
-        onSubmit({ name, type: 'recurring', dates, notes, computeRecurDatesInfo, goalId: id })
+        onSubmit({ name, type: 'recurring', dates, notes, computeRecurDatesInfo, goalId: id, isCompleted: false })
     }
 
     const onCheck = (event) => {

@@ -39,7 +39,7 @@ const Task = ({ task, onDelete }) => {
         })
             .then(res => console.log(res.data))
 
-        if (task.subtasks.length !== 0) {
+        if (task.type === "single" && task.subtasks.length !== 0) {
             const numCompletedSubtask = subtasks.filter((subtask) => subtask.isCompleted).length
             if (numCompletedSubtask === task.subtasks.length) {
                 setIsCompleted(true)
@@ -178,7 +178,8 @@ const Task = ({ task, onDelete }) => {
             </div>
 
             {
-                showSubtasks &&
+                // showSubtasks &&
+                task.type === "single" &&
                 <div>
                     {
                         task.subtasks.map((subtask, index) =>

@@ -17,9 +17,9 @@ export const dateForNextRecurrence = (date, recurEvery) => {
     } else if (recurEvery === "fw") {
         return new Date(yyyy, mm, dd + 28);
     } else if (recurEvery === "mth") {
-        return date.setMonth(mm + 1)
+        return new Date(yyyy, mm + 1, dd)
     } else {
-        return date.setYear(yyyy + 1)
+        return new Date(yyyy + 1, mm, dd)
     }
 }
 
