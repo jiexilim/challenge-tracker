@@ -18,9 +18,13 @@ const Task = ({ task, onDelete }) => {
     const classes = useStyles()
     const [showSubtasks, setShowSubtasks] = useState(true)
     const [showRecurProgress, setShowRecurProgress] = useState(false)
-    const [numCompleted, setNumCompleted] = useState(0)
-    const [numSkipped, setNumSkipped] = useState(0)
     const [completeAction, setCompleteAction] = useState(true)
+
+    const [newlyCompleted, setNewlyCompleted] = useState(0)
+    const [numCompleted, setNumCompleted] = useState(task.numCompleted)
+    const [dates, setDates] = useState(task.dates)
+    const [computeRecurDatesInfo, setComputeRecurDatesInfo] = useState(task.computeRecurDatesInfo)
+    const [numSkipped, setNumSkipped] = useState(0)
 
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
     const [subtasks, setSubtasks] = useState(task.subtasks)
@@ -29,15 +33,29 @@ const Task = ({ task, onDelete }) => {
     const [notes, setNotes] = useState(task.notes)
 
     useEffect(() => {
-        axios.post(serverURL + `/task/update/${task._id}`, {
-            name: name,
-            type: "single",
-            endDate: endDate,
-            subtasks: subtasks,
-            notes: notes,
-            isCompleted: isCompleted,
-        })
-            .then(res => console.log(res.data))
+        if (task.type === "single") {
+            axios.post(serverURL + `/task/update/${task._id}`, {
+                name: name,
+                type: "single",
+                endDate: endDate,
+                subtasks: subtasks,
+                notes: notes,
+                isCompleted: isCompleted,
+            })
+                .then(res => console.log(res.data))
+        } else if (task.type === "recurring") {
+            axios.post(serverURL + `/task/update/${task._id}`,
+                {
+                    name: name,
+                    type: "recurring",
+                    dates: dates,
+                    numCompleted: numCompleted,
+                    computeRecurDatesInfo: computeRecurDatesInfo,
+                    notes: notes,
+                    isCompleted: isCompleted,
+                }
+            ).then(res => console.log(res.data));
+        }
 
         if (task.type === "single" && task.subtasks.length !== 0) {
             const numCompletedSubtask = subtasks.filter((subtask) => subtask.isCompleted).length
@@ -48,7 +66,13 @@ const Task = ({ task, onDelete }) => {
             }
         }
 
-    }, [isCompleted, subtasks, name, endDate, notes])
+        if (task.type === "recurring") {
+            if (numCompleted === dates.length) {
+                setIsCompleted(true)
+            }
+        }
+
+    }, [isCompleted, subtasks, name, endDate, notes, numCompleted, dates])
 
     const checkTask = () => {
         setIsCompleted(!isCompleted)
@@ -72,43 +96,28 @@ const Task = ({ task, onDelete }) => {
     }
 
     const onEditSubmit = (task) => {
-        setName(task.name)
-        setEndDate(task.endDate)
-        setSubtasks(task.subtasks)
-        setNotes(task.notes)
-        console.log(subtasks)
+        if (task.type === "single") {
+            setName(task.name)
+            setEndDate(task.endDate)
+            setSubtasks(task.subtasks)
+            setNotes(task.notes)
+        } else {
+
+        }
     }
 
-    // const onSaveRecurProgress = () => {
-    //     // complete
-    //     const newNumCompleted = Number(task.numCompleted) + Number(numCompleted)
-    //     let updateIsCompleted = false
+    const onSaveRecurProgress = () => {
+        // skip
+        const newDates = [...dates]
+        newDates.splice(Number(numCompleted), Number(numSkipped))
+        setDates(newDates)
 
-    //     // skip
-    //     let newDates = task.dates
-    //     if (numSkipped > 0) {
-    //         newDates = task.dates.splice(task.numCompleted, numSkipped)
-    //     }
+        // complete
+        setNumCompleted(Number(numCompleted) + Number(newlyCompleted))
 
-    //     if (newNumCompleted === task.dates.length) {
-    //         updateIsCompleted = true
-    //     }
-
-    //     setNumSkipped(0)
-    //     setNumCompleted(0)
-
-    //     axios.post(serverURL + `/task/update/${task._id}`,
-    //         {
-    //             name: task.name,
-    //             type: "recurring",
-    //             dates: newDates,
-    //             numCompleted: newNumCompleted,
-    //             computeRecurDatesInfo: task.computeRecurDatesInfo,
-    //             notes: task.notes,
-    //             isCompleted: updateIsCompleted,
-    //         }
-    //     ).then(res => console.log(res.data));
-    // }
+        setNumSkipped(0)
+        setNewlyCompleted(0)
+    }
 
     return (
         <div className="whole-task-container">
@@ -145,12 +154,12 @@ const Task = ({ task, onDelete }) => {
                         isCompleted ?
                             <h3>Completed !</h3> :
                             (task.type === "recurring" ?
-                                new Date(task.dates[task.numCompleted]).getDate()
-                                + "   " + monthNames[new Date(task.endDate).getMonth()]
-                                + "   " + new Date(task.endDate).getFullYear() :
-                                new Date(task.endDate).getDate()
-                                + "   " + monthNames[new Date(task.endDate).getMonth()]
-                                + "   " + new Date(task.endDate).getFullYear())
+                                new Date(dates[numCompleted]).getDate()
+                                + "   " + monthNames[new Date(dates[numCompleted]).getMonth()]
+                                + "   " + new Date(dates[numCompleted]).getFullYear() :
+                                new Date(endDate).getDate()
+                                + "   " + monthNames[new Date(endDate).getMonth()]
+                                + "   " + new Date(endDate).getFullYear())
                     }
                 </h5>
                 <PopupState variant="popover" popupId="popup-popover">
@@ -214,8 +223,8 @@ const Task = ({ task, onDelete }) => {
                                     type="number"
                                     variant="outlined"
                                     classes={{ root: classes.taskInput }}
-                                    value={numCompleted}
-                                    onChange={(e) => setNumCompleted(e.target.value)}
+                                    value={newlyCompleted}
+                                    onChange={(e) => setNewlyCompleted(e.target.value)}
                                 />
                             </label> :
                             <label className="complete-skip-input">
@@ -230,10 +239,10 @@ const Task = ({ task, onDelete }) => {
                             </label>
                     }
                     <div className="recur-task-info">
-                        <p> Progress: {task.numCompleted} of {task.dates.length} instances completed </p>
+                        <p> Progress: {numCompleted} of {dates.length} instances completed </p>
                         <Button
                             classes={{ root: classes.blueButton }}
-                        // onClick={onSaveRecurProgress}
+                            onClick={onSaveRecurProgress}
                         >
                             SAVE
                         </Button>
