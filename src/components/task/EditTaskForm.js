@@ -4,13 +4,14 @@ import EditRecurringTask from "./EditRecurringtask"
 import { useServer } from "../../Server"
 import axios from "axios"
 
-const EditTaskForm = ({ popupState, task, onDelete }) => {
+const EditTaskForm = ({ popupState, task, onDelete, onEditSubmit }) => {
     const serverURL = useServer()
     const taskId = task._id
 
     const onSubmit = (task) => {
-        axios.post(serverURL + `/task/update/${taskId}`, task)
-            .then(res => console.log(res.data))
+        // axios.post(serverURL + `/task/update/${taskId}`, task)
+        //     .then(res => console.log(res.data))
+        onEditSubmit(task)
     }
 
     const deleteTask = async () => {

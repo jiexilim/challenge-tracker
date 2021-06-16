@@ -24,22 +24,34 @@ const Task = ({ task, onDelete }) => {
 
     const [isCompleted, setIsCompleted] = useState(task.isCompleted)
     const [subtasks, setSubtasks] = useState(task.subtasks)
+    const [name, setName] = useState(task.name)
+    const [endDate, setEndDate] = useState(task.endDate)
+    const [notes, setNotes] = useState(task.notes)
 
     useEffect(() => {
         axios.post(serverURL + `/task/update/${task._id}`, {
-            name: task.name,
+            name: name,
             type: "single",
-            endDate: task.endDate,
+            endDate: endDate,
             subtasks: subtasks,
-            notes: task.notes,
+            notes: notes,
             isCompleted: isCompleted,
         })
             .then(res => console.log(res.data))
-    }, [isCompleted, subtasks])
+
+        if (task.subtasks.length !== 0) {
+            const numCompletedSubtask = subtasks.filter((subtask) => subtask.isCompleted).length
+            if (numCompletedSubtask === task.subtasks.length) {
+                setIsCompleted(true)
+            } else {
+                setIsCompleted(false)
+            }
+        }
+
+    }, [isCompleted, subtasks, name, endDate, notes])
 
     const checkTask = () => {
         setIsCompleted(!isCompleted)
-        console.log('haha')
     }
 
     const checkSubtask = (id, isCompleted) => {
@@ -57,14 +69,14 @@ const Task = ({ task, onDelete }) => {
         copyOfSubtasks[i] = copyOfSubtask
 
         setSubtasks(copyOfSubtasks)
+    }
 
-        const numCompletedSubtask = subtasks.filter((subtask) => subtask.isCompleted).length
-
-        if (numCompletedSubtask === task.subtasks.length) {
-            setIsCompleted(true)
-        } else {
-            setIsCompleted(false)
-        }
+    const onEditSubmit = (task) => {
+        setName(task.name)
+        setEndDate(task.endDate)
+        setSubtasks(task.subtasks)
+        setNotes(task.notes)
+        console.log(subtasks)
     }
 
     // const onSaveRecurProgress = () => {
@@ -158,7 +170,7 @@ const Task = ({ task, onDelete }) => {
                                     horizontal: 'left',
                                 }}
                             >
-                                <EditTaskForm popupState={popupState} task={task} onDelete={onDelete} />
+                                <EditTaskForm popupState={popupState} task={task} onDelete={onDelete} onEditSubmit={onEditSubmit} />
                             </Popover>
                         </div>
                     )}

@@ -40,8 +40,6 @@ const EditSingleTask = ({ task, onSubmit, onDelete, popupState }) => {
                 <p>Complete by:</p>
                 <DatePicker
                     value={endDate}
-                    showTimeSelect
-                    onSelect={(date) => setEndDate(date)}
                     onChange={(date) => setEndDate(date)}
                 />
             </div>
