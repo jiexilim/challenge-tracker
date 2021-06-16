@@ -39,6 +39,16 @@ const GoalView = () => {
         updateProgressBar()
     }
 
+    const deleteTask = (id) => {
+        const i = tasks.findIndex(function (task) {
+            return task._id === id
+        })
+
+        let copyTasks = [...tasks]
+        copyTasks.splice(i, 1)
+        setTasks(copyTasks)
+    }
+
     const updateProgressBar = () => {
         setNumOfTasks(tasks.length)
         setProgress(tasks.filter((task) => task.isCompleted).length)
@@ -83,6 +93,7 @@ const GoalView = () => {
                         <Task
                             key={index}
                             task={task}
+                            onDelete={deleteTask}
                         />
                     ))
                 }

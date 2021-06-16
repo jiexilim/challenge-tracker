@@ -23,7 +23,7 @@ const SingleTaskForm = ({ onSubmit, popupState }) => {
 
     const onClick = () => {
         popupState.close()
-        onSubmit({ name, type: 'single', endDate, subtasks, notes, goalId: id })
+        onSubmit({ name, type: 'single', endDate, subtasks, notes, goalId: id, isCompleted: false })
     }
 
     return (

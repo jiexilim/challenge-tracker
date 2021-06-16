@@ -10,7 +10,7 @@ import { Popover, Button, Checkbox, TextField } from '@material-ui/core'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state'
 import axios from "axios"
 
-const Task = ({ task }) => {
+const Task = ({ task, onDelete }) => {
     const serverURL = useServer()
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -35,20 +35,11 @@ const Task = ({ task }) => {
             isCompleted: isCompleted,
         })
             .then(res => console.log(res.data))
-    }, [isCompleted])
-
-    useEffect(() => {
-        const numCompletedSubtask = subtasks.filter((subtask) => subtask.isCompleted).length
-
-        if (numCompletedSubtask === task.subtasks.length) {
-            setIsCompleted(true)
-        } else {
-            setIsCompleted(false)
-        }
-    }, [subtasks])
+    }, [isCompleted, subtasks])
 
     const checkTask = () => {
         setIsCompleted(!isCompleted)
+        console.log('haha')
     }
 
     const checkSubtask = (id, isCompleted) => {
@@ -66,38 +57,46 @@ const Task = ({ task }) => {
         copyOfSubtasks[i] = copyOfSubtask
 
         setSubtasks(copyOfSubtasks)
+
+        const numCompletedSubtask = subtasks.filter((subtask) => subtask.isCompleted).length
+
+        if (numCompletedSubtask === task.subtasks.length) {
+            setIsCompleted(true)
+        } else {
+            setIsCompleted(false)
+        }
     }
 
-    const onSaveRecurProgress = () => {
-        // complete
-        const newNumCompleted = Number(task.numCompleted) + Number(numCompleted)
-        let updateIsCompleted = false
+    // const onSaveRecurProgress = () => {
+    //     // complete
+    //     const newNumCompleted = Number(task.numCompleted) + Number(numCompleted)
+    //     let updateIsCompleted = false
 
-        // skip
-        let newDates = task.dates
-        if (numSkipped > 0) {
-            newDates = task.dates.splice(task.numCompleted, numSkipped)
-        }
+    //     // skip
+    //     let newDates = task.dates
+    //     if (numSkipped > 0) {
+    //         newDates = task.dates.splice(task.numCompleted, numSkipped)
+    //     }
 
-        if (newNumCompleted === task.dates.length) {
-            updateIsCompleted = true
-        }
+    //     if (newNumCompleted === task.dates.length) {
+    //         updateIsCompleted = true
+    //     }
 
-        setNumSkipped(0)
-        setNumCompleted(0)
+    //     setNumSkipped(0)
+    //     setNumCompleted(0)
 
-        axios.post(serverURL + `/task/update/${task._id}`,
-            {
-                name: task.name,
-                type: "recurring",
-                dates: newDates,
-                numCompleted: newNumCompleted,
-                computeRecurDatesInfo: task.computeRecurDatesInfo,
-                notes: task.notes,
-                isCompleted: updateIsCompleted,
-            }
-        ).then(res => console.log(res.data));
-    }
+    //     axios.post(serverURL + `/task/update/${task._id}`,
+    //         {
+    //             name: task.name,
+    //             type: "recurring",
+    //             dates: newDates,
+    //             numCompleted: newNumCompleted,
+    //             computeRecurDatesInfo: task.computeRecurDatesInfo,
+    //             notes: task.notes,
+    //             isCompleted: updateIsCompleted,
+    //         }
+    //     ).then(res => console.log(res.data));
+    // }
 
     return (
         <div className="whole-task-container">
@@ -159,7 +158,7 @@ const Task = ({ task }) => {
                                     horizontal: 'left',
                                 }}
                             >
-                                <EditTaskForm popupState={popupState} task={task} />
+                                <EditTaskForm popupState={popupState} task={task} onDelete={onDelete} />
                             </Popover>
                         </div>
                     )}
@@ -221,7 +220,7 @@ const Task = ({ task }) => {
                         <p> Progress: {task.numCompleted} of {task.dates.length} instances completed </p>
                         <Button
                             classes={{ root: classes.blueButton }}
-                            onClick={onSaveRecurProgress}
+                        // onClick={onSaveRecurProgress}
                         >
                             SAVE
                         </Button>
