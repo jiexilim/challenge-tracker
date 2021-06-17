@@ -17,33 +17,35 @@ const SignIn = ({ history }) => {
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="auth-form">
-			<h1>Sign in</h1>
-			<div>
-				<label>
-					Username
-					<input
-						className="auth-input"
-						type="text"
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
-					/>
-				</label>
-			</div>
-			<div>
-				<label>
-					Password
-					<input
-						className="auth-input"
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-				</label>
-			</div>
-			<input type='submit' value='SIGN IN' className="auth-btn" />
-			<p>Don't have an account? <Link to="/sign-up" className="white-link">   Sign Up</Link></p>
-		</form>
+		<div id="front-page">
+			<form onSubmit={onSubmit} className="auth-form">
+				<h1>Sign in</h1>
+				<div>
+					<label>
+						Username
+						<input
+							className="auth-input"
+							type="text"
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
+						/>
+					</label>
+				</div>
+				<div>
+					<label>
+						Password
+						<input
+							className="auth-input"
+							type="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+					</label>
+				</div>
+				<input type='submit' value='SIGN IN' className="auth-btn" />
+				<p>Don't have an account? <Link to="/sign-up" className="white-link">   Sign Up</Link></p>
+			</form>
+		</div>
 	)
 }
 
