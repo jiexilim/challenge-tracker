@@ -26,12 +26,14 @@ const Header = () => {
 		<div>
 			{
 				userAccess ?
-					<div className="nav-container-afr-auth">
-						<span id="greeting">
-							{userAccess && greeting()}
-						</span>
-						<span className="nav-link-afr-auth" onClick={() => setOpenForm(true)}>+ New Goal</span>
-						<SignOutButton />
+					<div className="extend-nav-container">
+						<div className="nav-container-afr-auth">
+							<span id="greeting">
+								{userAccess && greeting()}
+							</span>
+							<span className="nav-link-afr-auth" onClick={() => setOpenForm(true)}>+ New Goal</span>
+							<SignOutButton />
+						</div>
 					</div>
 					:
 					<div className="nav-container ">
