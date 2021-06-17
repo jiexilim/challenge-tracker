@@ -8,7 +8,7 @@ const EditSingleTask = ({ task, onSubmit, onDelete, popupState }) => {
     const classes = useStyles()
     const [showSubtasksForm, setShowSubtasksForm] = useState(false)
     const [name, setName] = useState(task.name)
-    const [endDate, setEndDate] = useState(task.endDate)
+    const [endDate, setEndDate] = useState(new Date(task.endDate))
     const [subtasks, setSubtasks] = useState(task.subtasks)
     const [notes, setNotes] = useState(!task.notes ? "" : task.notes)
     const [subtaskName, setSubtaskName] = useState("")
