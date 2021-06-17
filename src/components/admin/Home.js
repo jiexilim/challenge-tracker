@@ -4,9 +4,6 @@ import Dashboard from "./Dashboard"
 const Home = () => {
     const userAccess = localStorage.getItem("userAccess");
 
-    useEffect(() => {
-    }, [])
-
     return (
         userAccess
             ? <Dashboard />
