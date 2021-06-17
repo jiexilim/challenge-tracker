@@ -20,7 +20,7 @@ const EditRecurringtask = ({ task, onSubmit, onDelete, popupState }) => {
     const [checkedDays, setCheckedDays] = useState(task.computeRecurDatesInfo.checkedDays)
     const { sun, mon, tue, wed, thu, fri, sat } = checkedDays
     const [endAfter, setEndAfter] = useState(task.computeRecurDatesInfo.endAfter)
-    const [endDate, setEndDate] = useState(task.computeRecurDatesInfo.endDate)
+    const [endDate, setEndDate] = useState(new Date(task.computeRecurDatesInfo.endDate))
     const [count, setCount] = useState(task.computeRecurDatesInfo.count)
 
     const onSave = () => {
