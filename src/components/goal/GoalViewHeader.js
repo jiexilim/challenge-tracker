@@ -22,7 +22,6 @@ const GoalViewHeader = ({ goal, progress, numOfTasks }) => {
                             />
                         </Button>
                     </h2>
-                    <h3>{goal.notes}</h3>
                 </span>
                 <ProgressBar
                     percent={progress / numOfTasks}
