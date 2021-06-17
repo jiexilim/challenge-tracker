@@ -101,7 +101,7 @@ body > * {
 	width: 100%;
 	position: fixed;
 	background-color: #f4f7fb;
-	z-index: 100000;
+	z-index: 1001;
 }
 
 .nav-container-afr-auth {
