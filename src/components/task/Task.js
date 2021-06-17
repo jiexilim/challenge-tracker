@@ -16,7 +16,7 @@ const Task = ({ task, onDelete }) => {
         "July", "August", "September", "October", "November", "December"
     ]
     const classes = useStyles()
-    const [showSubtasks, setShowSubtasks] = useState(true)
+    const [showSubtasks, setShowSubtasks] = useState(false)
     const [showRecurProgress, setShowRecurProgress] = useState(false)
     const [completeAction, setCompleteAction] = useState(true)
 
@@ -146,10 +146,10 @@ const Task = ({ task, onDelete }) => {
                                 <Button>
                                     <AiOutlineUnorderedList
                                         size={20}
-                                    // onClick={(e) => {
-                                    //     e.stopPropagation()
-                                    //     setShowSubtasks(!showSubtasks)
-                                    // }}
+                                        onClick={() => {
+                                            // e.stopPropagation()
+                                            setShowSubtasks(!showSubtasks)
+                                        }}
                                     />
                                 </Button>
                     }
@@ -193,8 +193,7 @@ const Task = ({ task, onDelete }) => {
             </div>
 
             {
-                // showSubtasks &&
-                task.type === "single" &&
+                (showSubtasks && task.type === "single") &&
                 <div>
                     {
                         task.subtasks.map((subtask, index) =>
