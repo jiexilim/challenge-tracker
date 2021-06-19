@@ -6,6 +6,7 @@ import Home from "./components/admin/Home"
 import SignIn from "./components/admin/SignIn"
 import SignUp from "./components/admin/SignUp"
 import Header from "./components/admin/Header"
+import Calendar from "./components/admin/Calendar"
 import Sidebar from "./components/admin/Sidebar"
 import GoalView from "./components/goal/GoalView"
 import { useAuth } from "./auth/ProvideAuth"
@@ -25,6 +26,7 @@ const Layout = () => {
                             <Route exact path="/" component={Home} />
                             <Route exact path="/sign-in" component={SignIn} />
                             <Route exact path="/sign-up" component={SignUp} />
+                            <PrivateRoute path="/calendar" component={Calendar} />
                             <PrivateRoute path="/goal/:id" component={GoalView} />
                             <Route render={() => <h1>Eror 404</h1>} />
                         </Switch>

@@ -8,6 +8,15 @@ import DatePicker from 'react-date-picker'
 import jwt from "jsonwebtoken"
 import axios from "axios"
 
+const getRandomColor = () => {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 const CreateGoal = ({ history, closeForm }) => {
     const serverURL = useServer()
     const classes = useStyles()
@@ -24,19 +33,19 @@ const CreateGoal = ({ history, closeForm }) => {
     };
 
     const onSubmit = () => {
-        console.log(typeof endDate)
         axios.post(serverURL + "/goal/create",
             {
                 name,
                 benefit,
-                endDate,
+                endDate: new Date(endDate),
                 notes,
                 tags,
-                userId: decoded.id
+                userId: decoded.id,
+                color: getRandomColor(),
             }).then(res => {
                 console.log(res.data)
                 history.push(`/goal/${res.data.goalId}`)
-            });
+            })
     }
 
     return (

@@ -61,6 +61,7 @@ body > * {
 .content {
 	margin-top: 125px;
 	margin-left: 10px;
+	padding-bottom: 50px;
 }
 
 .slogan {
@@ -269,7 +270,6 @@ body > * {
 /* edit goal form */
 
 .edit-goal-container {
-	width: 70%;
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 30px;
@@ -355,20 +355,23 @@ p {
 .sidebar {
 	width: 100px;
 	height: 100%;
-	padding: 0 0;
+	padding: 30px 0;
 	position: fixed;
 	background-color: rgb(39, 38, 34);
+	display: flex;
+	flex-direction: column;
 }
 
 .sidebar-item {
-	padding: 15px;
+	padding: 20px;
 	text-align: center;
+	margin-bottom: 60px;
 }
 
 .sidebar-link {
 	color: #0290b0;
 	display: block;
-	font-size: 50px;
+	position: fixed;
 }
 
 .sidebar-link:hover {
@@ -526,6 +529,7 @@ p {
 	grid-auto-columns: 14.3%;
 	grid-column-gap: 20px;
 	width: 100%;
+	cursor: pointer;
 }
 
 .drop-down-up-icon {
@@ -727,6 +731,19 @@ p {
 .recur-task-info button {
 	grid-area: 2 / 1 / span 1 / span 1;
 	margin-left: auto;
+}
+
+/* --- */
+
+/* calendar */
+
+.fc {
+	margin-right: 200px;
+	height: auto;
+}
+
+.fc-list-event {
+	background-color: white;
 }
 
 /* --- */

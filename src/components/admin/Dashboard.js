@@ -14,16 +14,26 @@ const Dashboard = ({ history }) => {
     const classes = useStyles()
     const [goals, setGoals] = useState([])
     const [openForm, setOpenForm] = useState(false)
+    let tasksStorage = []
 
     const auth = localStorage.getItem("userAccess")
     const decoded = jwt.decode(auth)
 
-    useEffect(() => {
-        axios.get(serverURL + "/goal/",
+    useEffect(async () => {
+        const goalsRes = await axios.get(serverURL + "/goal/",
             { params: { userId: decoded.id } })
-            .then(res => setGoals(res.data))
-            .catch(err => console.log(err))
-    })
+
+        setGoals(goalsRes.data)
+
+        for (let goal of goalsRes.data) {
+            const tasksRes = await axios.get(serverURL + "/task/", { params: { goalId: goal._id } })
+            tasksRes.data.map((task) => task.color = goal.color)
+
+            tasksStorage.push(...tasksRes.data)
+        }
+
+        localStorage.data = JSON.stringify(tasksStorage);
+    }, [])
 
     const accessGoal = async (id) => {
         history.push(`/goal/${id}`)
