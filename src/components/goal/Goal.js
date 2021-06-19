@@ -40,16 +40,19 @@ const Goal = ({ goal, onAccess }) => {
                         className="goal-list-bar"
                         percent={progress / numOfTasks}
                     />
-                    <h4 className="goal-list-due">
-                        <FaCalendarCheck />
-                        {
-                            new Intl.DateTimeFormat('en-US', {
-                                year: 'numeric',
-                                month: '2-digit', day: '2-digit'
-                            }).format(new Date(goal.endDate))
-                        }
-                    </h4>
-                    <h3 className="goal-list-completed-msg">{isCompleted && "completed!"}</h3>
+                    {
+                        isCompleted ?
+                            <h3 className="goal-list-completed-msg">{"completed!"}</h3> :
+                            <h4 className="goal-list-due">
+                                <FaCalendarCheck />
+                                {
+                                    new Intl.DateTimeFormat('en-US', {
+                                        year: 'numeric',
+                                        month: '2-digit', day: '2-digit'
+                                    }).format(new Date(goal.endDate))
+                                }
+                            </h4>
+                    }
                 </span>
                 {
                     tasks.length > 0 ?
