@@ -19,7 +19,7 @@ const formatDate = (ISO) => {
 }
 
 const Calendar = () => {
-    var storedData = JSON.parse(localStorage.data)
+    let storedData = JSON.parse(localStorage.data)
 
     storedData.sort((t1, t2) => {
         return t1 - t2
