@@ -33,18 +33,24 @@ const CreateGoal = ({ history, closeForm }) => {
     };
 
     const onSubmit = () => {
-        axios.post(serverURL + "/goal/create",
-            {
-                name,
-                benefit,
-                endDate: new Date(endDate),
-                notes,
-                tags,
-                userId: decoded.id,
-                color: getRandomColor(),
-            }).then(res => {
+        const goal = {
+            name,
+            benefit,
+            endDate: new Date(endDate),
+            notes,
+            tags,
+            userId: decoded.id,
+            color: getRandomColor(),
+        }
+        axios.post(serverURL + "/goal/create", goal)
+            .then(res => {
                 console.log(res.data)
-                history.push(`/goal/${res.data.goalId}`)
+                history.push({
+                    pathname: `/goal/${res.data.goalId}`,
+                    state: {
+                        goal: goal,
+                    }
+                })
             })
     }
 
