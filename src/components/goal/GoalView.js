@@ -12,6 +12,7 @@ import axios from "axios"
 
 const GoalView = () => {
     const { id } = useParams()
+    const [loading, setLoading] = useState(true)
     const serverURL = useServer()
     const classes = useStyles()
     const [goal, setGoal] = useState({})
@@ -22,7 +23,10 @@ const GoalView = () => {
     useEffect(() => {
         const getData = async () => {
             await axios.get(serverURL + "/goal/" + id)
-                .then(res => setGoal(res.data.goal))
+                .then(res => {
+                    setGoal(res.data.goal)
+                    setLoading(false)
+                })
                 .catch(err => console.log(err))
 
             await axios.get(serverURL + "/task/", { params: { goalId: id } })
@@ -56,55 +60,59 @@ const GoalView = () => {
     }
 
     return (
-        <div className="content" id="goal-view">
-            <div id="goal-view-left">
-                <GoalViewHeader
-                    goal={goal}
-                    progress={progress}
-                    numOfTasks={numOfTasks}
-                />
-                <PopupState variant="popover" popupId="popup-popover">
-                    {(popupState) => (
-                        <div>
-                            <Button
-                                classes={{ root: classes.mainBlueButton }}
-                                variant="contained"
-                                {...bindTrigger(popupState)}
-                            >
-                                ADD TASK
-                            </Button>
-                            <Popover
-                                {...bindPopover(popupState)}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                            >
-                                <AddTaskForm popupState={popupState} onAddTask={onAddTask} />
-                            </Popover>
-                        </div>
-                    )}
-                </PopupState>
-                <div id="tasks-container">
-                    {
-                        tasks.map((task, index) => (
-                            <Task
-                                key={index}
-                                task={task}
-                                onDelete={deleteTask}
-                            />
-                        ))
-                    }
+        loading ?
+            <div className="content" id="goal-view">
+                Setting up goal...
+            </div> :
+            <div className="content" id="goal-view">
+                <div id="goal-view-left">
+                    <GoalViewHeader
+                        goal={goal}
+                        progress={progress}
+                        numOfTasks={numOfTasks}
+                    />
+                    <PopupState variant="popover" popupId="popup-popover">
+                        {(popupState) => (
+                            <div>
+                                <Button
+                                    classes={{ root: classes.mainBlueButton }}
+                                    variant="contained"
+                                    {...bindTrigger(popupState)}
+                                >
+                                    ADD TASK
+                                </Button>
+                                <Popover
+                                    {...bindPopover(popupState)}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }}
+                                >
+                                    <AddTaskForm popupState={popupState} onAddTask={onAddTask} />
+                                </Popover>
+                            </div>
+                        )}
+                    </PopupState>
+                    <div id="tasks-container">
+                        {
+                            tasks.map((task, index) => (
+                                <Task
+                                    key={index}
+                                    task={task}
+                                    onDelete={deleteTask}
+                                />
+                            ))
+                        }
+                    </div>
                 </div>
+
+                <NotesPurpose notes={goal.notes} purpose={goal.benefit} />
+
             </div>
-
-            <NotesPurpose notes={goal.notes} purpose={goal.benefit} />
-
-        </div>
     )
 }
 
