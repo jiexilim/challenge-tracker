@@ -39,9 +39,8 @@ const Dashboard = ({ history }) => {
     const accessGoal = async (id) => {
         history.push(`/goal/${id}`)
     }
-
-    if (goals.length === 0) {
-        return (
+    return (
+        !loading && ((goals.length === 0) ?
             <div className="content">
                 <Button
                     classes={{ root: classes.mainBlueButton }}
@@ -55,11 +54,7 @@ const Dashboard = ({ history }) => {
                     closeForm={() => setOpenForm(false)}
                     FormComponent={CreateGoal}
                 />
-            </div >
-        )
-    } else {
-        return (
-            !loading &&
+            </div > :
             <div className="content">
                 {
                     goals.map((goal, index) => (
@@ -71,8 +66,8 @@ const Dashboard = ({ history }) => {
                     ))
                 }
             </div>
-        )
-    }
+        ))
+
 }
 
 export default withRouter(Dashboard)
