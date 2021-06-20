@@ -31,46 +31,51 @@ const RecurringTaskForm = ({ onSubmit, popupState }) => {
     const onClick = () => {
         popupState.close()
 
-        let dates = []
         let dateInc = startDate
         const checkedDaysList = dayOfWeek.filter((day) => checkedDays[day])
 
-        if (endAfter === "countReached") {
-            for (let i = 0; i < count; i++) {
-                if (recurEvery === "wk") {
-                    if (dates.length === 0 && checkedDaysList.includes(dayOfWeek[startDate.getDay()])) {
-                        dates.push(dateInc)
-                        continue
-                    }
-                    for (let day of checkedDaysList) {
-                        dateInc = dateForDayOfNextWeek(dateInc, day)
-                        dates.push(dateInc)
-
-                    }
-                } else {
-                    dates.push(dateInc)
-                    dateInc = dateForNextRecurrence(dateInc, recurEvery)
-                }
-            }
-        } else {
-            while (dateInc.getTime() <= endDate.getTime()) {
-                if (recurEvery === "wk") {
-                    if (dates.length === 0 && checkedDays[dayOfWeek[startDate.getDay()]]) {
-                        dates.push(dateInc)
-                        continue
-                    }
-                    for (let day of dayOfWeek) {
-                        if (checkedDays[day]) {
-                            dateInc = dateForDayOfNextWeek(dateInc, day)
-                            dateInc.getTime() <= endDate.getTime() && dates.push(dateInc)
+        const computeDates = () => {
+            let datesList = []
+            if (endAfter === "countReached") {
+                for (let i = 0; i < count; i++) {
+                    if (recurEvery === "wk") {
+                        if (datesList.length === 0 && checkedDaysList.includes(dayOfWeek[startDate.getDay()])) {
+                            datesList.push(dateInc)
+                            continue
                         }
+                        for (let day of checkedDaysList) {
+                            dateInc = dateForDayOfNextWeek(dateInc, day)
+                            datesList.push(dateInc)
+
+                        }
+                    } else {
+                        datesList.push(dateInc)
+                        dateInc = dateForNextRecurrence(dateInc, recurEvery)
                     }
-                } else {
-                    dates.push(dateInc)
-                    dateInc = dateForNextRecurrence(dateInc, recurEvery)
+                }
+            } else {
+                while (dateInc.getTime() <= endDate.getTime()) {
+                    if (recurEvery === "wk") {
+                        if (datesList.length === 0 && checkedDays[dayOfWeek[startDate.getDay()]]) {
+                            datesList.push(dateInc)
+                            continue
+                        }
+                        for (let day of dayOfWeek) {
+                            if (checkedDays[day]) {
+                                dateInc = dateForDayOfNextWeek(dateInc, day)
+                                dateInc.getTime() <= endDate.getTime() && datesList.push(dateInc)
+                            }
+                        }
+                    } else {
+                        datesList.push(dateInc)
+                        dateInc = dateForNextRecurrence(dateInc, recurEvery)
+                    }
                 }
             }
+            return datesList
         }
+
+        const dates = computeDates()
 
         dates.sort((d1, d2) => {
             return d1 - d2
