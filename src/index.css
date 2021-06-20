@@ -518,7 +518,8 @@ p {
 }
 
 .goal-container {
-	display: flex;
+	display: grid;
+	grid-template-columns: 90% 10%;
 	width: 95%;
 	align-items: center;
 	padding: 20px 30px;
@@ -530,6 +531,7 @@ p {
 	grid-column-gap: 20px;
 	width: 100%;
 	cursor: pointer;
+	align-items: center;
 }
 
 .drop-down-up-icon {
@@ -537,10 +539,17 @@ p {
 	color: #0290b0;
 }
 
+.goal-list-icon {
+	margin-right: 20px;
+}
+
 .goal-list-name {
 	grid-area: 1 / 1 / span 1 / span 2;
 	align-self: center;
 	justify-self: start;
+	align-items: center;
+	display: flex;
+	flex-direction: row;
 }
 
 .goal-list-bar {

@@ -4,6 +4,7 @@ import DashboardTask from "../task/DashboardTask"
 import DBProgressBar from '../admin/DBProgressBar'
 import { FaCalendarCheck } from "react-icons/fa"
 import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from "react-icons/io"
+import { GiStairsGoal } from "react-icons/gi"
 import axios from "axios";
 
 const Goal = ({ goal, onAccess }) => {
@@ -35,7 +36,10 @@ const Goal = ({ goal, onAccess }) => {
                 <span
                     className="access-goal"
                     onClick={() => onAccess(goal._id)}>
-                    <h3 className="goal-list-name">{goal.name} </h3>
+                    <div className="goal-list-name">
+                        <GiStairsGoal className="goal-list-icon" size={25} style={{ color: goal.color }} />
+                        <h3>{goal.name}</h3>
+                    </div>
                     <DBProgressBar
                         className="goal-list-bar"
                         percent={progress / numOfTasks}
