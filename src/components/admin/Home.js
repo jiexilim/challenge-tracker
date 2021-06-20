@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Dashboard from "./Dashboard"
 
 const Home = () => {
-    const userAccess = localStorage.getItem("userAccess");
+    let userAccess = localStorage.getItem("userAccess");
 
     return (
         userAccess ?
