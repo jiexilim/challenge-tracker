@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useServer } from "../../Server";
 import Task from "../task/Task.js";
 import GoalViewHeader from "./GoalViewHeader"
@@ -12,7 +12,6 @@ import axios from "axios"
 
 const GoalView = () => {
     const { id } = useParams()
-    const location = useLocation()
     const serverURL = useServer()
     const classes = useStyles()
     const [goal, setGoal] = useState({})
@@ -31,12 +30,7 @@ const GoalView = () => {
                     setTasks(res.data)
                 })
                 .catch(err => console.log(err))
-
-            // let storedData = JSON.parse(localStorage.data)
-            // storedData.map((task) => task.goalId === id)
-            // setTasks(storedData)
         }
-        setGoal(location.state.goal)
         getData()
         updateProgressBar()
     }, [tasks])
