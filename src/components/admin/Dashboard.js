@@ -33,7 +33,7 @@ const Dashboard = ({ history }) => {
         }
 
         localStorage.data = JSON.stringify(tasksStorage);
-    }, [])
+    }, [goals])
 
     const accessGoal = async (id) => {
         history.push(`/goal/${id}`)
