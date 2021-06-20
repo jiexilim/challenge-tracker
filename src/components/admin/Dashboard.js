@@ -12,6 +12,7 @@ import { useStyles } from "../../functions"
 const Dashboard = ({ history }) => {
     const serverURL = useServer()
     const classes = useStyles()
+    const [loading, setLoading] = useState(true)
     const [goals, setGoals] = useState([])
     const [openForm, setOpenForm] = useState(false)
     let tasksStorage = []
@@ -24,7 +25,7 @@ const Dashboard = ({ history }) => {
             { params: { userId: decoded.id } })
 
         setGoals(goalsRes.data)
-
+        setLoading(false)
         for (let goal of goalsRes.data) {
             const tasksRes = await axios.get(serverURL + "/task/", { params: { goalId: goal._id } })
             tasksRes.data.map((task) => task.color = goal.color)
@@ -58,6 +59,7 @@ const Dashboard = ({ history }) => {
         )
     } else {
         return (
+            !loading &&
             <div className="content">
                 {
                     goals.map((goal, index) => (
