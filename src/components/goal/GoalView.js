@@ -25,13 +25,13 @@ const GoalView = () => {
             await axios.get(serverURL + "/goal/" + id)
                 .then(res => {
                     setGoal(res.data.goal)
+                    setLoading(false)
                 })
                 .catch(err => console.log(err))
 
             await axios.get(serverURL + "/task/", { params: { goalId: id } })
                 .then(res => {
                     setTasks(res.data)
-                    setLoading(false)
                 })
                 .catch(err => console.log(err))
         }
